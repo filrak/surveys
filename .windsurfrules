@@ -1,0 +1,5 @@
+This is an application for conducting surveys based on the AI chat.
+
+The functionality of the application is divided into two parts:
+1. The part where a survey is conducted, it's a simple chat window that is supposed to collect and save answers tot he survey
+2. A survey creation page where we set up the questions and describe what kind of answers we expect.
