@@ -8,6 +8,9 @@
         variant="secondary"
         @click="router.push('/list')"
       >
+        <template #icon-left>
+          <ArrowLeftIcon class="h-4 w-4 mr-1.5" />
+        </template>
         Back to List
       </BaseButton>
     </div>
@@ -37,9 +40,12 @@
               <div class="flex justify-between items-center">
                 <h3 class="text-sm font-medium text-gray-900">Question {{ index + 1 }}</h3>
                 <BaseButton
-                  variant="danger"
+                  type="negative"
                   @click="removeQuestion(index)"
                 >
+                  <template #icon-left>
+                    <TrashIcon class="h-4 w-4" />
+                  </template>
                   Remove
                 </BaseButton>
               </div>
