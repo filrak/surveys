@@ -4,13 +4,12 @@
     <!-- Header -->
     <div class="flex justify-between items-center mb-8">
       <h1 class="text-2xl font-semibold text-gray-900">{{ isEditing ? 'Edit Survey' : 'Create Survey' }}</h1>
-      <button 
+      <BaseButton
+        variant="secondary"
         @click="router.push('/list')"
-        class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >
-        <ArrowLeftIcon class="h-4 w-4 mr-1.5" />
         Back to List
-      </button>
+      </BaseButton>
     </div>
 
     <!-- Survey Form -->
@@ -37,13 +36,12 @@
               <!-- Question Number -->
               <div class="flex justify-between items-center">
                 <h3 class="text-sm font-medium text-gray-900">Question {{ index + 1 }}</h3>
-                <button 
+                <BaseButton
+                  variant="danger"
                   @click="removeQuestion(index)"
-                  class="inline-flex items-center px-2.5 py-1.5 text-sm font-medium text-red-600 hover:text-red-800 focus:outline-none"
                 >
-                  <TrashIcon class="h-4 w-4 mr-1" />
                   Remove
-                </button>
+                </BaseButton>
               </div>
 
               <!-- Question Input -->
@@ -99,22 +97,20 @@
         </div>
         
         <!-- Action Buttons -->
-        <div class="mt-8 flex justify-between items-center">
-          <button 
+        <div class="mt-8 flex justify-end gap-3">
+          <BaseButton
+            variant="secondary"
             @click="addQuestion"
-            class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            <PlusIcon class="h-4 w-4 mr-1.5" />
             Add Question
-          </button>
-
-          <button 
+          </BaseButton>
+          <BaseButton
+            variant="primary"
             @click="saveSurvey"
-            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            :disabled="!isValid"
           >
-            <CheckIcon class="h-4 w-4 mr-1.5" />
             {{ isEditing ? 'Save Changes' : 'Create Survey' }}
-          </button>
+          </BaseButton>
         </div>
       </div>
     </div>
@@ -122,7 +118,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useSurvey } from '~/composables/useSurvey'
 import { 
@@ -132,6 +128,7 @@ import {
   ArrowLeftIcon,
   DocumentTextIcon 
 } from '@heroicons/vue/24/outline'
+import BaseButton from '~/components/BaseButton.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -205,4 +202,8 @@ const saveSurvey = () => {
   // Redirect to list page
   router.push('/list')
 }
+
+const isValid = computed(() => {
+  return surveyName.value.trim() && questions.value.length > 0 && questions.value.every(q => q.text.trim() && q.expectedAnswer.trim())
+})
 </script>

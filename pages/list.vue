@@ -4,13 +4,15 @@
     <!-- Header -->
     <div class="flex justify-between items-center mb-8">
       <h1 class="text-2xl font-semibold text-gray-900">Surveys</h1>
-      <NuxtLink 
-        to="/create" 
-        class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      <BaseButton
+        variant="primary"
+        @click="router.push('/create')"
       >
-        <PlusIcon class="h-5 w-5 mr-2" />
-        Create New Survey
-      </NuxtLink>
+        <template #icon-left>
+          <PlusIcon class="h-4 w-4 mr-1.5" />
+        </template>
+        Create Survey
+      </BaseButton>
     </div>
 
     <!-- Table -->
@@ -45,21 +47,25 @@
                     {{ survey.updatedAt ? formatDate(survey.updatedAt) : '-' }}
                   </td>
                   <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                    <div class="space-x-2">
-                      <button
+                    <div class="flex items-center gap-2">
+                      <BaseButton
+                        variant="secondary"
                         @click="router.push(`/chat/${survey.id}`)"
-                        class="inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                       >
-                        <ChatBubbleLeftIcon class="h-4 w-4 mr-1.5" />
+                        <template #icon-left>
+                          <PlayIcon class="h-4 w-4 mr-1.5" />
+                        </template>
                         Test
-                      </button>
-                      <button
+                      </BaseButton>
+                      <BaseButton
+                        variant="secondary"
                         @click="router.push(`/create?id=${survey.id}`)"
-                        class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                       >
-                        <PencilIcon class="h-4 w-4 mr-1.5" />
+                        <template #icon-left>
+                          <PencilIcon class="h-4 w-4 mr-1.5" />
+                        </template>
                         Edit
-                      </button>
+                      </BaseButton>
                     </div>
                   </td>
                 </tr>
@@ -89,7 +95,8 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSurvey } from '~/composables/useSurvey'
-import { PlusIcon, PencilIcon, ChatBubbleLeftIcon } from '@heroicons/vue/24/outline'
+import BaseButton from '~/components/BaseButton.vue'
+import { PlusIcon, PencilIcon, PlayIcon } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
 const { listSurveys } = useSurvey()
