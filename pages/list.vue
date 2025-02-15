@@ -56,6 +56,15 @@
                 </BaseButton>
                 <BaseButton
                   variant="secondary"
+                  @click="router.push(`/answers/${survey.id}`)"
+                >
+                  <template #icon-left>
+                    <ClipboardDocumentListIcon class="h-4 w-4 mr-1.5" />
+                  </template>
+                  Answers
+                </BaseButton>
+                <BaseButton
+                  variant="secondary"
                   @click="router.push(`/create?id=${survey.id}`)"
                 >
                   <template #icon-left>
@@ -85,7 +94,8 @@ import BaseButton from '~/components/BaseButton.vue'
 import { 
   PlusIcon, 
   PencilIcon, 
-  ChatBubbleLeftIcon 
+  ChatBubbleLeftIcon,
+  ClipboardDocumentListIcon 
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
