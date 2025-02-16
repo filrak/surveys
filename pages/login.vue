@@ -1,150 +1,129 @@
 <script lang="ts" setup>
 import {
-  createUserWithEmailAndPassword,
-  EmailAuthProvider,
-  linkWithCredential,
-  signInAnonymously,
   signInWithEmailAndPassword,
   signInWithPopup,
-  signInWithRedirect,
-  signOut,
   GoogleAuthProvider,
-  updateCurrentUser,
-  updateProfile,
-  AuthCredential,
-  getRedirectResult,
 } from 'firebase/auth'
 import { ref } from 'vue'
-import {
-  updateCurrentUserProfile,
-  useCurrentUser,
-  useFirebaseAuth,
-} from 'vuefire'
+import { useFirebaseAuth, useCurrentUser } from 'vuefire'
 
-const googleAuthProvider = new GoogleAuthProvider()
-// auth is null on the server but it's fine as long as we don't use it. So we force the type to be non-null here because
-// auth is only used within methods that are only called on the client
 const auth = useFirebaseAuth()!
 const user = useCurrentUser()
-let credential: AuthCredential | null = null
+const googleAuthProvider = new GoogleAuthProvider()
+
+const email = ref('')
+const password = ref('')
+const errorMessage = ref('')
+const isLoading = ref(false)
 
 const route = useRoute()
 const router = useRouter()
 
-// automatically redirect the user if they are logged in but was rejected on the server because of an outdated cookie
+// Redirect if user is already logged in
 watch(user, (user) => {
-  if (
-    user &&
-    route.query.redirect &&
-    typeof route.query.redirect === 'string'
-  ) {
+  if (user && route.query.redirect && typeof route.query.redirect === 'string') {
     router.push(route.query.redirect)
+  } else if (user) {
+    router.push('/') // Default redirect to home if no redirect query
   }
 })
 
-// new user
-const email = ref('')
-const password = ref('')
-function signUp() {
-  // link to an existing anonymous account
-  if (user.value?.isAnonymous) {
-    credential = EmailAuthProvider.credential(email.value, password.value)
-
-    return linkWithCredential(user.value, credential).then(() => {
-      return signInWithEmailAndPassword(auth, email.value, password.value)
-    })
+async function loginWithEmail() {
+  if (!email.value || !password.value) {
+    errorMessage.value = 'Please fill in all fields'
+    return
   }
-
-  // create a regular account
-  return createUserWithEmailAndPassword(auth, email.value, password.value)
-}
-
-function signinPopup() {
-  return signInWithPopup(auth, googleAuthProvider).then((result) => {
-    const googleCredential = GoogleAuthProvider.credentialFromResult(result)
-    credential = googleCredential
-    const token = googleCredential?.accessToken
-    console.log('Got Google token', token)
-    console.log('Got googleCredential', googleCredential)
-  })
-}
-
-async function changeUserImage() {
-  if (user.value) {
-    await updateCurrentUserProfile({
-      photoURL: 'https://i.pravatar.cc/150?u=' + Date.now(),
-    })
-
-    // updateCurrentUserEmail('hello@esm.dev')
+  
+  try {
+    isLoading.value = true
+    errorMessage.value = ''
+    await signInWithEmailAndPassword(auth, email.value, password.value)
+  } catch (error: any) {
+    errorMessage.value = error.message || 'Failed to login'
+  } finally {
+    isLoading.value = false
   }
 }
 
-function signinRedirect() {
-  signInWithRedirect(auth, googleAuthProvider)
+async function loginWithGoogle() {
+  try {
+    isLoading.value = true
+    errorMessage.value = ''
+    await signInWithPopup(auth, googleAuthProvider)
+  } catch (error: any) {
+    errorMessage.value = error.message || 'Failed to login with Google'
+  } finally {
+    isLoading.value = false
+  }
 }
-
-onMounted(() => {
-  getRedirectResult(auth).then((creds) => {
-    console.log('got creds', creds)
-    if (creds) {
-      // credential = creds.user.
-    }
-  })
-})
 </script>
 
 <template>
-  <main>
-    <h1>Auth playground</h1>
-    <button @click="signOut(auth)">SignOut</button>
-    <button @click="signInAnonymously(auth)">Anonymous signIn</button>
-    <button @click="signinPopup()">Signin Google (popup)</button>
-    <button @click="signinRedirect()">Signin Google (redirect)</button>
-    <button @click="changeUserImage">Change User picture</button>
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+      <div>
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          Sign in to your account
+        </h2>
+      </div>
+      
+      <form class="mt-8 space-y-6" @submit.prevent="loginWithEmail">
+        <div class="rounded-md shadow-sm -space-y-px">
+          <div>
+            <label for="email" class="sr-only">Email address</label>
+            <input
+              id="email"
+              v-model="email"
+              type="email"
+              required
+              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Email address"
+            >
+          </div>
+          <div>
+            <label for="password" class="sr-only">Password</label>
+            <input
+              id="password"
+              v-model="password"
+              type="password"
+              required
+              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Password"
+            >
+          </div>
+        </div>
 
-    <form @submit.prevent="signUp()">
-      <fieldset>
-        <legend>New User</legend>
+        <div v-if="errorMessage" class="text-red-500 text-sm text-center">
+          {{ errorMessage }}
+        </div>
 
-        <label> Email: <input v-model="email" type="email" required /> </label>
+        <div class="flex flex-col space-y-4">
+          <button
+            type="submit"
+            :disabled="isLoading"
+            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+          >
+            <span v-if="isLoading">Signing in...</span>
+            <span v-else>Sign in with Email</span>
+          </button>
 
-        <label>
-          Password: <input v-model="password" type="password" required />
-        </label>
+          <button
+            type="button"
+            @click="loginWithGoogle"
+            :disabled="isLoading"
+            class="group relative w-full flex justify-center py-2 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+          >
+            <span v-if="isLoading">Signing in...</span>
+            <span v-else>Sign in with Google</span>
+          </button>
+        </div>
 
-        <button>Create</button>
-      </fieldset>
-    </form>
-
-    <form @submit.prevent="signInWithEmailAndPassword(auth, email, password)">
-      <fieldset>
-        <legend>Sign in</legend>
-
-        <label> Email: <input v-model="email" type="email" required /> </label>
-
-        <label>
-          Password: <input v-model="password" type="password" required />
-        </label>
-
-        <button>Signin</button>
-      </fieldset>
-    </form>
-
-    <p v-if="user">
-      Name: {{ user.displayName }} <br />
-      <img
-        v-if="user.photoURL"
-        :src="user.photoURL"
-        referrerpolicy="no-referrer"
-      />
-    </p>
-
-    <hr />
-
-    <!-- this is for debug purposes only, displaying it on the server would create a hydration mismatch -->
-    <ClientOnly>
-      <p>Current User:</p>
-      <pre>{{ user }}</pre>
-    </ClientOnly>
-  </main>
+        <div class="text-sm text-center">
+          <NuxtLink to="/signup" class="font-medium text-indigo-600 hover:text-indigo-500">
+            Don't have an account? Sign up
+          </NuxtLink>
+        </div>
+      </form>
+    </div>
+  </div>
 </template>
