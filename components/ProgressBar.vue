@@ -1,6 +1,6 @@
 <template>
   <div class="w-full">
-    <div class="flex w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+    <div class="flex w-full bg-gray-100 rounded-full overflow-hidden">
       <div class="flex w-full">
         <template v-for="step in total" :key="step">
           <div 

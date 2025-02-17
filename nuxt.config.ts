@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   ssr: false,
-  modules: ['@nuxtjs/tailwindcss', 'nuxt-vuefire'],
+  modules: ['@nuxtjs/tailwindcss', 'nuxt-vuefire', 'shadcn-nuxt'],
   vuefire: {
     config: {
       apiKey: process.env.FIREBASE_API_KEY,

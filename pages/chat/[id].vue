@@ -1,34 +1,11 @@
 <template>
-  <div class="min-h-screen bg-gray-50 flex flex-col">
-    <!-- Header -->
-    <div class="bg-white border-b border-gray-200">
-      <div class="container mx-auto px-4 py-4">
-        <div class="flex justify-between items-center">
-          <div>
-            <h1 class="text-xl font-semibold text-gray-900">{{ survey?.name || 'Loading...' }}</h1>
-            <p class="text-sm text-gray-500">AI-guided survey</p>
-          </div>
-
-          <div class="flex items-center gap-3">
-            <BaseButton 
-              variant="secondary"
-              @click="handleSave"
-            >
-              <template #icon-left>
-                <DocumentCheckIcon class="h-4 w-4 mr-1.5" />
-              </template>
-              Save
-            </BaseButton>
-            <BaseButton 
-              variant="secondary"
-              @click="router.push('/list')"
-            >
-              <template #icon-left>
-                <XMarkIcon class="h-4 w-4 mr-1.5" />
-              </template>
-              Exit Survey
-            </BaseButton>
-          </div>
+  <div class="min-h-screen bg-background flex flex-col">
+    <!-- Survey Info -->
+    <div class="border-b">
+      <div class="container mx-auto py-4">
+        <div>
+          <h1 class="text-2xl font-bold tracking-tight">{{ survey?.name || 'Loading...' }}</h1>
+          <p class="text-sm text-muted-foreground">AI-guided survey</p>
         </div>
       </div>
     </div>
@@ -38,56 +15,43 @@
       <div class="container mx-auto">
         <!-- Messages -->
         <div class="px-4 pt-6">
-          <div class="bg-gray-50 rounded-lg shadow-sm h-[calc(100vh-200px)] flex flex-col">
-            <div class="flex-1 overflow-y-auto p-4" ref="messagesContainer">
+          <Card class="h-[calc(100vh-200px)] flex flex-col">
+            <ScrollArea class="flex-1 p-4" ref="messagesContainer">
               <div class="grid grid-cols-12 gap-y-2">
                 <ChatBubble
                   v-for="(message, index) in messages"
                   :key="index"
                   :content="message.content.replace('QUESTION ANSWERED', '')"
                   :is-user="message.type === 'user'"
+                  :timestamp="message.timestamp"
                 />
 
                 <!-- Loading Indicator -->
-                <div v-if="isLoading" class="col-start-1 col-end-13 sm:col-end-11 md:col-end-9 lg:col-end-8 xl:col-end-7 md:px-3 pt-3">
-                  <div class="flex items-start gap-2">
-                    <div class="min-w-12 shrink-0">
-                      <span class="flex relative justify-center items-center box-border overflow-hidden align-middle z-0 w-10 h-10 text-tiny bg-indigo-100 text-indigo-600 rounded-full">
-                        <SparklesIcon class="w-6 h-6" />
-                      </span>
-                    </div>
-                    <div class="glass flex p-4 rounded-xl shadow-sm bg-white text-gray-900 rounded-tl-none">
-                      <div class="flex space-x-1">
-                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0ms"></div>
-                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 150ms"></div>
-                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 300ms"></div>
-                      </div>
-                    </div>
-                  </div>
+                <div v-if="isLoading" class="col-span-12 flex justify-center py-2">
+                  <Loader2Icon class="h-6 w-6 animate-spin text-muted-foreground" />
                 </div>
               </div>
-            </div>
+            </ScrollArea>
 
             <!-- Input Area -->
-            <div class="border-t border-gray-200 bg-white p-4 rounded-b-lg">
-              <form @submit.prevent="sendMessage" class="flex space-x-3">
-                <input
+            <div class="border-t p-4">
+              <form @submit.prevent="sendMessage" class="flex gap-2">
+                <Input
                   v-model="userInput"
-                  type="text"
                   placeholder="Type your answer..."
-                  class="block flex-1 rounded-full border-gray-200 shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 sm:text-sm px-4 py-2.5"
-                  :disabled="isLoading || isSurveyComplete"
-                >
-                <BaseButton
+                  :disabled="isLoading"
+                  class="flex-1"
+                />
+                <Button 
                   type="submit"
-                  variant="icon"
-                  :disabled="!userInput.trim() || isLoading || isSurveyComplete"
+                  :disabled="isLoading || !userInput.trim()"
                 >
-                  <PaperAirplaneIcon class="h-5 w-5 transform rotate-90" />
-                </BaseButton>
+                  <SendIcon class="h-4 w-4" />
+                  <span class="sr-only">Send message</span>
+                </Button>
               </form>
             </div>
-          </div>
+          </Card>
         </div>
       </div>
     </div>
@@ -98,14 +62,19 @@
 import { ref, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useFetch } from '#app'
-import { 
-  XMarkIcon,
-  SparklesIcon,
-  PaperAirplaneIcon,
-  DocumentCheckIcon 
-} from '@heroicons/vue/24/outline'
 import { useSurvey } from '~/composables/useSurvey'
 import { useAnswer } from '~/composables/useAnswer'
+import { 
+  CheckIcon, 
+  XIcon, 
+  Loader2Icon,
+  SendIcon
+} from 'lucide-vue-next'
+import ChatBubble from '~/components/ChatBubble.vue'
+import Card from '~/components/ui/card/Card.vue'
+import ScrollArea from '~/components/ui/scroll-area/ScrollArea.vue'
+import Button from '~/components/ui/button/Button.vue'
+import Input from '~/components/ui/input/Input.vue'
 
 const messages = ref([])
 const userInput = ref('')

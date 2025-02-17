@@ -5,4 +5,4 @@ The functionality of the application is divided into two parts:
 2. A survey creation page where we set up the questions and describe what kind of answers we expect.
 
 For conveniance, let's use local storage to store the answers and questions.
-Use tilwind for styling.
+Use tshadcn-vue for ui, style additionally with tailwind if needed.

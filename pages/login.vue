@@ -1,3 +1,69 @@
+<template>
+  <div class="min-h-screen flex items-center justify-center bg-background">
+    <Card class="w-full max-w-md">
+      <CardHeader>
+        <CardTitle>Welcome back</CardTitle>
+        <CardDescription>Enter your credentials to sign in</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form @submit.prevent="loginWithEmail" class="space-y-4">
+          <div class="space-y-2">
+            <Label for="email">Email</Label>
+            <Input
+              id="email"
+              v-model.trim="email"
+              type="email"
+              placeholder="m@example.com"
+              required
+            />
+          </div>
+          
+          <div class="space-y-2">
+            <Label for="password">Password</Label>
+            <Input
+              id="password"
+              v-model.trim="password"
+              type="password"
+              required
+            />
+          </div>
+
+          <div v-if="errorMessage" class="text-sm text-destructive text-center">
+            {{ errorMessage }}
+          </div>
+
+          <div class="space-y-4">
+            <Button
+              type="submit"
+              class="w-full"
+              :disabled="isLoading"
+            >
+              <Loader2Icon v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
+              {{ isLoading ? 'Signing in...' : 'Sign in with Email' }}
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              class="w-full"
+              @click="loginWithGoogle"
+              :disabled="isLoading"
+            >
+              <Loader2Icon v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
+              {{ isLoading ? 'Signing in...' : 'Sign in with Google' }}
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+      <CardFooter class="flex justify-center">
+        <NuxtLink to="/signup" class="text-sm text-primary hover:underline">
+          Don't have an account? Sign up
+        </NuxtLink>
+      </CardFooter>
+    </Card>
+  </div>
+</template>
+
 <script lang="ts" setup>
 import {
   signInWithEmailAndPassword,
@@ -6,6 +72,18 @@ import {
 } from 'firebase/auth'
 import { ref } from 'vue'
 import { useFirebaseAuth, useCurrentUser } from 'vuefire'
+import { Loader2Icon } from 'lucide-vue-next'
+
+// Import shadcn components
+import Card from '~/components/ui/card/Card.vue'
+import CardContent from '~/components/ui/card/CardContent.vue'
+import CardDescription from '~/components/ui/card/CardDescription.vue'
+import CardFooter from '~/components/ui/card/CardFooter.vue'
+import CardHeader from '~/components/ui/card/CardHeader.vue'
+import CardTitle from '~/components/ui/card/CardTitle.vue'
+import Button from '~/components/ui/button/Button.vue'
+import Input from '~/components/ui/input/Input.vue'
+import Label from '~/components/ui/label/Label.vue'
 
 const auth = useFirebaseAuth()!
 const user = useCurrentUser()
@@ -29,17 +107,22 @@ watch(user, (user) => {
 })
 
 async function loginWithEmail() {
-  if (!email.value || !password.value) {
-    errorMessage.value = 'Please fill in all fields'
-    return
-  }
-  
   try {
     isLoading.value = true
     errorMessage.value = ''
-    await signInWithEmailAndPassword(auth, email.value, password.value)
+
+    if (!email.value.trim() || !password.value.trim()) {
+      errorMessage.value = 'Please fill in all fields'
+      return
+    }
+    
+    await signInWithEmailAndPassword(auth, email.value.trim(), password.value.trim())
   } catch (error: any) {
-    errorMessage.value = error.message || 'Failed to login'
+    if (error.code === 'auth/invalid-credential') {
+      errorMessage.value = 'Invalid email or password'
+    } else {
+      errorMessage.value = error.message || 'Failed to login'
+    }
   } finally {
     isLoading.value = false
   }
@@ -57,73 +140,3 @@ async function loginWithGoogle() {
   }
 }
 </script>
-
-<template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
-      <div>
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Sign in to your account
-        </h2>
-      </div>
-      
-      <form class="mt-8 space-y-6" @submit.prevent="loginWithEmail">
-        <div class="rounded-md shadow-sm -space-y-px">
-          <div>
-            <label for="email" class="sr-only">Email address</label>
-            <input
-              id="email"
-              v-model="email"
-              type="email"
-              required
-              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Email address"
-            >
-          </div>
-          <div>
-            <label for="password" class="sr-only">Password</label>
-            <input
-              id="password"
-              v-model="password"
-              type="password"
-              required
-              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Password"
-            >
-          </div>
-        </div>
-
-        <div v-if="errorMessage" class="text-red-500 text-sm text-center">
-          {{ errorMessage }}
-        </div>
-
-        <div class="flex flex-col space-y-4">
-          <button
-            type="submit"
-            :disabled="isLoading"
-            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
-          >
-            <span v-if="isLoading">Signing in...</span>
-            <span v-else>Sign in with Email</span>
-          </button>
-
-          <button
-            type="button"
-            @click="loginWithGoogle"
-            :disabled="isLoading"
-            class="group relative w-full flex justify-center py-2 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
-          >
-            <span v-if="isLoading">Signing in...</span>
-            <span v-else>Sign in with Google</span>
-          </button>
-        </div>
-
-        <div class="text-sm text-center">
-          <NuxtLink to="/signup" class="font-medium text-indigo-600 hover:text-indigo-500">
-            Don't have an account? Sign up
-          </NuxtLink>
-        </div>
-      </form>
-    </div>
-  </div>
-</template>

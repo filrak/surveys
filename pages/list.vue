@@ -1,116 +1,156 @@
 <!-- Survey List Page -->
 <template>
-  <div class="container mx-auto px-4 py-8">
-    <!-- Header -->
-    <div class="flex justify-between items-center mb-8">
-      <h1 class="text-2xl font-semibold text-gray-900">Surveys</h1>
-      <BaseButton
-        variant="primary"
-        @click="router.push('/create')"
-      >
-        <template #icon-left>
-          <PlusIcon class="h-4 w-4 mr-1.5" />
-        </template>
-        Create Survey
-      </BaseButton>
-    </div>
-
-    <!-- Table -->
-    <div class="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-lg">
-      <table class="min-w-full divide-y divide-gray-300">
-        <thead>
-          <tr>
-            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</th>
-            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Questions</th>
-            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Created</th>
-            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Last Updated</th>
-            <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
-              <span class="sr-only">Actions</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200">
-          <tr v-for="survey in surveys" :key="survey.id">
-            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-              {{ survey.name }}
-            </td>
-            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-              {{ survey.questions.length }} {{ survey.questions.length === 1 ? 'question' : 'questions' }}
-            </td>
-            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-              {{ formatDate(survey.createdAt) }}
-            </td>
-            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-              {{ survey.updatedAt ? formatDate(survey.updatedAt) : '-' }}
-            </td>
-            <td class="whitespace-nowrap py-4 pl-3 pr-4 text-right sm:pr-6">
-              <div class="flex justify-end gap-2">
-                <BaseButton
-                  variant="secondary"
-                  @click="router.push(`/chat/${survey.id}`)"
-                >
-                  <template #icon-left>
-                    <ChatBubbleLeftIcon class="h-4 w-4 mr-1.5" />
-                  </template>
-                  Test
-                </BaseButton>
-                <BaseButton
-                  variant="secondary"
-                  @click="router.push(`/answers/${survey.id}`)"
-                >
-                  <template #icon-left>
-                    <ClipboardDocumentListIcon class="h-4 w-4 mr-1.5" />
-                  </template>
-                  Answers
-                </BaseButton>
-                <BaseButton
-                  variant="secondary"
-                  @click="router.push(`/create?id=${survey.id}`)"
-                >
-                  <template #icon-left>
-                    <PencilIcon class="h-4 w-4 mr-1.5" />
-                  </template>
-                  Edit
-                </BaseButton>
-              </div>
-            </td>
-          </tr>
-          <tr v-if="surveys.length === 0">
-            <td colspan="5" class="py-8 text-center text-sm text-gray-500">
-              No surveys yet. Create your first one!
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="min-h-screen bg-background">
+    <div class="container mx-auto py-8">
+      <!-- Table -->
+      <div class="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Questions</TableHead>
+              <TableHead>Responses</TableHead>
+              <TableHead>Created</TableHead>
+              <TableHead>Last Updated</TableHead>
+              <TableHead class="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow v-for="survey in surveysWithResponses" :key="survey.id">
+              <TableCell class="font-medium">{{ survey.name }}</TableCell>
+              <TableCell>
+                {{ survey.questions.length }} {{ survey.questions.length === 1 ? 'question' : 'questions' }}
+              </TableCell>
+              <TableCell>
+                <div class="flex items-center gap-2">
+                  {{ survey.responseCount }}
+                  <Badge v-if="survey.completedCount" variant="default" class="text-xs">
+                    {{ survey.completedCount }} completed
+                  </Badge>
+                </div>
+              </TableCell>
+              <TableCell>{{ formatDate(survey.createdAt) }}</TableCell>
+              <TableCell>{{ survey.updatedAt ? formatDate(survey.updatedAt) : '-' }}</TableCell>
+              <TableCell class="text-right">
+                <div class="flex justify-end gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    @click="router.push(`/answers/${survey.id}`)"
+                  >
+                    <ClipboardListIcon class="mr-2 h-4 w-4" />
+                    Answers
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    @click="router.push(`/create?id=${survey.id}`)"
+                  >
+                    <PencilIcon class="mr-2 h-4 w-4" />
+                    Edit
+                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger as-child>
+                      <Button variant="ghost" size="sm">
+                        <MoreVerticalIcon class="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem @click="router.push(`/chat/${survey.id}`)">
+                        <MessageSquareIcon class="mr-2 h-4 w-4" />
+                        Start Survey
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem @click="deleteSurvey(survey.id)" class="text-destructive">
+                        <Trash2Icon class="mr-2 h-4 w-4" />
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </TableCell>
+            </TableRow>
+            <!-- Empty state -->
+            <TableRow v-if="!surveys.length">
+              <TableCell colspan="6" class="h-24 text-center">
+                <div class="flex flex-col items-center justify-center space-y-2">
+                  <ClipboardListIcon class="h-8 w-8 text-muted-foreground" />
+                  <div class="text-lg font-medium">No surveys</div>
+                  <div class="text-sm text-muted-foreground">
+                    Create your first survey to get started.
+                  </div>
+                </div>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
     </div>
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useSurvey } from '~/composables/useSurvey'
-import BaseButton from '~/components/BaseButton.vue'
+import { useAnswer } from '~/composables/useAnswer'
 import { 
   PlusIcon, 
-  PencilIcon, 
-  ChatBubbleLeftIcon,
-  ClipboardDocumentListIcon 
-} from '@heroicons/vue/24/outline'
+  MessageSquare as MessageSquareIcon, 
+  Pencil as PencilIcon, 
+  MoreVertical as MoreVerticalIcon,
+  Trash2 as Trash2Icon,
+  ClipboardList as ClipboardListIcon
+} from 'lucide-vue-next'
+
+// Import shadcn components
+import Table from '~/components/ui/table/Table.vue'
+import TableBody from '~/components/ui/table/TableBody.vue'
+import TableCell from '~/components/ui/table/TableCell.vue'
+import TableHead from '~/components/ui/table/TableHead.vue'
+import TableHeader from '~/components/ui/table/TableHeader.vue'
+import TableRow from '~/components/ui/table/TableRow.vue'
+import DropdownMenu from '~/components/ui/dropdown-menu/DropdownMenu.vue'
+import DropdownMenuTrigger from '~/components/ui/dropdown-menu/DropdownMenuTrigger.vue'
+import DropdownMenuContent from '~/components/ui/dropdown-menu/DropdownMenuContent.vue'
+import DropdownMenuItem from '~/components/ui/dropdown-menu/DropdownMenuItem.vue'
+import DropdownMenuSeparator from '~/components/ui/dropdown-menu/DropdownMenuSeparator.vue'
+import Button from '~/components/ui/button/Button.vue'
+import Badge from '~/components/ui/badge/Badge.vue'
+import AppHeader from '~/components/ui/app-header/AppHeader.vue'
 
 const router = useRouter()
 const { listSurveys } = useSurvey()
+const { getAnswers } = useAnswer()
 const surveys = ref([])
 
-onMounted(() => {
-  surveys.value = listSurveys()
+// Add response count to each survey
+const surveysWithResponses = computed(() => {
+  return surveys.value.map(survey => {
+    const answers = getAnswers(survey.id)
+    const completedAnswers = answers.filter(a => a.finished)
+    return {
+      ...survey,
+      responseCount: answers.length,
+      completedCount: completedAnswers.length
+    }
+  })
+})
+
+onMounted(async () => {
+  surveys.value = await listSurveys()
 })
 
 const formatDate = (date) => {
-  return new Date(date).toLocaleDateString('en-GB', {
-    day: '2-digit',
+  return new Date(date).toLocaleDateString('en-US', {
     month: 'short',
+    day: 'numeric',
     year: 'numeric'
   })
+}
+
+const deleteSurvey = async (id) => {
+  // Add your delete logic here
+  surveys.value = surveys.value.filter(survey => survey.id !== id)
 }
 </script>
