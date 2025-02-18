@@ -117,7 +117,6 @@ import DropdownMenuItem from '~/components/ui/dropdown-menu/DropdownMenuItem.vue
 import DropdownMenuSeparator from '~/components/ui/dropdown-menu/DropdownMenuSeparator.vue'
 import Button from '~/components/ui/button/Button.vue'
 import Badge from '~/components/ui/badge/Badge.vue'
-import AppHeader from '~/components/ui/app-header/AppHeader.vue'
 
 const router = useRouter()
 const { listSurveys } = useSurvey()
