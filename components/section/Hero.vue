@@ -4,7 +4,7 @@
       <div class="flex flex-col items-center space-y-4 text-center">
         <div class="space-y-2">
           <h1 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
-            Create AI-Powered Surveys
+            Tired of low-quality feedback?
           </h1>
           <p class="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
             Design intelligent surveys that adapt to your respondents. Get deeper insights with our AI-driven analysis.
