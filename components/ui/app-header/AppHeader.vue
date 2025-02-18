@@ -17,6 +17,14 @@
           >
             Surveys
           </NuxtLink>
+          <a
+            href="https://betterfeedbackhub.lemonsqueezy.com/buy/37441d8e-1d5c-4736-b152-0559c47ebd84"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 h-10 py-2 px-4"
+          >
+            Buy
+          </a>
         </nav>
 
         <div class="flex items-center gap-2">

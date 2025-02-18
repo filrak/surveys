@@ -70,6 +70,17 @@
                     :disabled="isLoading"
                   />
                 </div>
+
+                <!-- Unwanted Answer -->
+                <div class="space-y-2">
+                  <Label :for="'unwanted-answer-' + index">Unwanted Answer</Label>
+                  <Textarea
+                    :id="'unwanted-answer-' + index"
+                    v-model="question.unwantedAnswer"
+                    placeholder="Describe what kind of answer you want to avoid"
+                    :disabled="isLoading"
+                  />
+                </div>
               </div>
             </div>
 
@@ -90,7 +101,7 @@
           <div class="flex justify-end space-x-4">
             <Button
               type="submit"
-              :disabled="!isValid || isLoading"
+              :disabled="isLoading"
             >
               <Loader2Icon v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
               {{ isLoading ? 'Saving...' : 'Save Survey' }}
@@ -123,7 +134,7 @@ import Textarea from '~/components/ui/textarea/Textarea.vue'
 
 const route = useRoute()
 const router = useRouter()
-const { getSurvey, saveSurvey: saveSurveyToStorage } = useSurvey()
+const { getSurvey, setSurvey } = useSurvey()
 
 const isLoading = ref(false)
 const surveyName = ref('')
@@ -133,7 +144,8 @@ const isEditing = computed(() => route.query.id)
 // Initialize empty question
 const createEmptyQuestion = () => ({
   text: '',
-  expectedAnswer: ''
+  expectedAnswer: '',
+  unwantedAnswer: ''
 })
 
 // Add new question
@@ -148,16 +160,13 @@ const removeQuestion = (index) => {
 
 // Save survey
 const saveSurvey = async () => {
+  isLoading.value = true
   try {
-    isLoading.value = true
     const survey = {
-      id: isEditing.value || Date.now().toString(),
       name: surveyName.value,
       questions: questions.value,
-      createdAt: new Date(),
-      updatedAt: new Date()
     }
-    await saveSurveyToStorage(survey)
+    await setSurvey(survey, isEditing.value ? route.query.id : undefined)
     router.push('/list')
   } catch (error) {
     console.error('Error saving survey:', error)
@@ -178,11 +187,5 @@ onMounted(() => {
     // Add first question by default for new surveys
     addQuestion()
   }
-})
-
-const isValid = computed(() => {
-  return surveyName.value.trim() && 
-         questions.value.length > 0 && 
-         questions.value.every(q => q.text.trim() && q.expectedAnswer.trim())
 })
 </script>
