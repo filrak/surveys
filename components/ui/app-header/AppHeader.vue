@@ -41,6 +41,15 @@
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
+                <DropdownMenuItem>
+                  <ScriptLemonSqueezy>
+                    <NuxtLink href="https://betterfeedbackhub.lemonsqueezy.com/buy/37441d8e-1d5c-4736-b152-0559c47ebd84?embed=1">
+                      <CreditCardIcon class="mr-2 h-4 w-4" />
+                      Buy Subscription ($9.99)
+                    </NuxtLink>
+                  </ScriptLemonSqueezy>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem @click="handleSignOut">
                   <LogOutIcon class="mr-2 h-4 w-4" />
                   Sign Out
@@ -76,7 +85,8 @@ import {
   User as UserIcon,
   LogIn as LogInIcon,
   LogOut as LogOutIcon,
-  ChevronDown as ChevronDownIcon
+  ChevronDown as ChevronDownIcon,
+  CreditCard as CreditCardIcon
 } from 'lucide-vue-next'
 import ThemeSwitcher from '~/components/ui/theme-switcher/ThemeSwitcher.vue'
 import Button from '~/components/ui/button/Button.vue'
@@ -84,6 +94,7 @@ import DropdownMenu from '~/components/ui/dropdown-menu/DropdownMenu.vue'
 import DropdownMenuTrigger from '~/components/ui/dropdown-menu/DropdownMenuTrigger.vue'
 import DropdownMenuContent from '~/components/ui/dropdown-menu/DropdownMenuContent.vue'
 import DropdownMenuItem from '~/components/ui/dropdown-menu/DropdownMenuItem.vue'
+import DropdownMenuSeparator from '~/components/ui/dropdown-menu/DropdownMenuSeparator.vue'
 
 defineProps<{
   showNav?: boolean
