@@ -72,4 +72,12 @@ yarn preview
 bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+# TO-DO
+
+- Bind user to survey
+- Replace local storage with firebase
+- Add landing
+- Create priccing plans and limits
+- Add token limits
+- Add presets for question rules
+- Polish UI
