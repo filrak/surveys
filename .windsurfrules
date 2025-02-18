@@ -5,5 +5,10 @@ The functionality of the application is divided into two parts:
 2. A survey creation page where we set up the questions and describe what kind of answers we expect.
 
 For conveniance, let's use local storage to store the answers and questions.
-Use shadcn-vue for ui, style additionally with tailwind if needed.
+Use shadcn-vue for ui, style additionally with tailwind if needed but always try to use native shadcn first.
+
 Use firebase for authentication (vue-firstore for Nuxt 3).
+
+Check .filestructure to understand what files are in the repository and what are their responsibilities.
+
+Every time you make changes to a file or add a file, add a file structure in the .filestructure with comments on what is where.

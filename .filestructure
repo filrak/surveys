@@ -1,0 +1,38 @@
+# File Structure
+
+## Core Configuration
+- `nuxt.config.ts` - Main Nuxt configuration file with Firebase setup and runtime config
+- `tailwind.config.js` - Tailwind CSS configuration with shadcn theme setup
+- `README.md` - Project documentation and TODO list
+
+## Pages
+- `pages/`
+  - `index.vue` - Home page with a centered "Go to List" button
+  - `login.vue` - Authentication page with email and Google sign-in options
+  - `signup.vue` - Registration page with email and Google sign-up options
+  - `list.vue` - Survey list page
+  - `create.vue` - Survey creation page
+  - `chat/[id].vue` - Dynamic chat page for conducting surveys
+  - `answers/[id].vue` - Survey answers view page
+  - `subscribe.vue` - Subscription/pricing page
+
+## Components
+- `components/`
+  - `ui/` - shadcn-vue components
+    - `button/` - Button component
+    - `card/` - Card components (Card, CardHeader, CardContent, etc.)
+    - `input/` - Input component
+    - `label/` - Label component
+    - `app-header/` - Application header component
+
+## Middleware
+- `middleware/`
+  - `auth.global.js` - Global authentication middleware (excludes home, login, and signup pages)
+
+## Assets
+- `public/`
+  - `google.svg` - Google logo for authentication buttons
+
+## Configuration Files
+- `.windsurfrules` - Project requirements and guidelines
+- `.filestructure` - This file, documenting the project structure

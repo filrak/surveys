@@ -2,11 +2,11 @@
   <div class="min-h-screen flex items-center justify-center bg-background">
     <Card class="w-full max-w-md">
       <CardHeader>
-        <CardTitle>Welcome back</CardTitle>
-        <CardDescription>Enter your credentials to sign in</CardDescription>
+        <CardTitle>Create an account</CardTitle>
+        <CardDescription>Enter your details to sign up</CardDescription>
       </CardHeader>
       <CardContent>
-        <form @submit.prevent="handleAuthEmail" class="space-y-4">
+        <form @submit.prevent="handleAuthEmailSignup" class="space-y-4">
           <div class="space-y-2">
             <Label for="email">Email</Label>
             <Input
@@ -28,6 +28,16 @@
             />
           </div>
 
+          <div class="space-y-2">
+            <Label for="confirmPassword">Confirm Password</Label>
+            <Input
+              id="confirmPassword"
+              v-model.trim="confirmPassword"
+              type="password"
+              required
+            />
+          </div>
+
           <div v-if="errorMessage" class="text-sm text-destructive text-center">
             {{ errorMessage }}
           </div>
@@ -39,36 +49,38 @@
               :disabled="isLoading"
             >
               <Loader2Icon v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
-              {{ isLoading ? 'Signing in...' : 'Sign in with Email' }}
+              {{ isLoading ? 'Creating account...' : 'Sign up with Email' }}
             </Button>
 
             <Button
               type="button"
               variant="outline"
               class="w-full"
-              @click="handleAuthGoogle"
+              @click="handleAuthGoogleSignup"
               :disabled="isLoading"
             >
               <img src="/google.svg" alt="Google" class="mr-2 h-4 w-4" />
-              {{ isLoading ? 'Signing in...' : 'Sign in with Google' }}
+              Sign up with Google
             </Button>
+
+            <div class="text-center text-sm text-muted-foreground">
+              Already have an account?{" "}
+              <NuxtLink to="/login" class="text-primary hover:underline">
+                Sign in
+              </NuxtLink>
+            </div>
           </div>
         </form>
       </CardContent>
-      <CardFooter class="flex justify-center">
-        <NuxtLink to="/signup" class="text-sm text-primary hover:underline">
-          Don't have an account? Sign up
-        </NuxtLink>
-      </CardFooter>
     </Card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { useRouter, useRoute } from '#app'
-import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
-import { useFirebaseAuth, useCurrentUser } from 'vuefire'
+import { ref } from 'vue'
+import { useRouter } from '#app'
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { useFirebaseAuth } from 'vuefire'
 import { Loader2Icon } from 'lucide-vue-next'
 import Input from '~/components/ui/input/Input.vue'
 import Label from '~/components/ui/label/Label.vue'
@@ -80,55 +92,43 @@ import CardHeader from '~/components/ui/card/CardHeader.vue'
 import CardTitle from '~/components/ui/card/CardTitle.vue'
 
 const router = useRouter()
-const route = useRoute()
 const auth = useFirebaseAuth()!
-const user = useCurrentUser()
 
 const email = ref('')
 const password = ref('')
+const confirmPassword = ref('')
 const errorMessage = ref('')
 const isLoading = ref(false)
 
-// Redirect user to requested page after successful login
-watch(user, (user) => {
-  if (user && route.query.redirect && typeof route.query.redirect === 'string') {
-    router.push(route.query.redirect)
-  } else if (user) {
-    router.push('/list') // Default redirect to list if no redirect query
+// Handle email/password registration
+async function handleAuthEmailSignup() {
+  if (password.value !== confirmPassword.value) {
+    errorMessage.value = 'Passwords do not match'
+    return
   }
-})
 
-// Handle email/password authentication
-async function handleAuthEmail() {
+  isLoading.value = true
+  errorMessage.value = ''
+
   try {
-    isLoading.value = true
-    errorMessage.value = ''
-
-    if (!email.value.trim() || !password.value.trim()) {
-      errorMessage.value = 'Please fill in all fields'
-      return
-    }
-    
-    await signInWithEmailAndPassword(auth, email.value.trim(), password.value.trim())
+    await createUserWithEmailAndPassword(auth, email.value, password.value)
+    router.push('/list')
   } catch (error: any) {
-    if (error.code === 'auth/invalid-credential') {
-      errorMessage.value = 'Invalid email or password'
-    } else {
-      errorMessage.value = error.message
-    }
+    errorMessage.value = error.message
   } finally {
     isLoading.value = false
   }
 }
 
-// Handle Google OAuth authentication
-async function handleAuthGoogle() {
+// Handle Google OAuth registration
+async function handleAuthGoogleSignup() {
   isLoading.value = true
   errorMessage.value = ''
 
   try {
     const provider = new GoogleAuthProvider()
     await signInWithPopup(auth, provider)
+    router.push('/list')
   } catch (error: any) {
     errorMessage.value = error.message
   } finally {
