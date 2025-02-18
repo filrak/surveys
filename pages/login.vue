@@ -55,7 +55,7 @@
           </div>
         </form>
       </CardContent>
-      <CardFooter class="flex justify-center">
+      <CardFooter class="flex justify-center pb-5">
         <NuxtLink to="/signup" class="text-sm text-primary hover:underline">
           Don't have an account? Sign up
         </NuxtLink>
