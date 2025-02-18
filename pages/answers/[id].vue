@@ -78,6 +78,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useCurrentUser } from 'vuefire'
 import { InboxIcon, MessageSquareIcon } from 'lucide-vue-next'
 import ChatBubble from '~/components/ChatBubble.vue'
 import Card from '~/components/ui/card/Card.vue'
@@ -91,6 +92,7 @@ import { useSurvey } from '~/composables/useSurvey'
 
 const route = useRoute()
 const router = useRouter()
+const user = useCurrentUser()
 const { getAnswers } = useAnswer()
 const { getSurvey } = useSurvey()
 
@@ -113,7 +115,15 @@ const formatDate = (date) => {
 
 onMounted(() => {
   const surveyId = route.params.id as string
-  survey.value = getSurvey(surveyId)
+  const surveyData = getSurvey(surveyId)
+  
+  // Redirect if survey doesn't exist or doesn't belong to user
+  if (!surveyData) {
+    router.push('/list')
+    return
+  }
+  
+  survey.value = surveyData
   answers.value = getAnswers(surveyId)
 })
 </script>

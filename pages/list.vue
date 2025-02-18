@@ -2,6 +2,14 @@
 <template>
   <div class="min-h-screen bg-background">
     <div class="container mx-auto py-8">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-6">
+        <h1 class="text-3xl font-bold tracking-tight">Your Surveys</h1>
+        <Button @click="router.push('/create')" class="inline-flex items-center">
+          <PlusIcon class="mr-2 h-4 w-4" />
+          Create Survey
+        </Button>
+      </div>
       <!-- Table -->
       <div class="rounded-md border">
         <Table>
@@ -91,7 +99,8 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
+import { useCurrentUser } from 'vuefire'
 import { useSurvey } from '~/composables/useSurvey'
 import { useAnswer } from '~/composables/useAnswer'
 import { 

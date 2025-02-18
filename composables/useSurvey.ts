@@ -1,4 +1,5 @@
 import { ref } from 'vue'
+import { useCurrentUser } from 'vuefire'
 
 interface Question {
   text: string
@@ -8,6 +9,7 @@ interface Question {
 
 interface Survey {
   id: string
+  userId: string
   name: string
   questions: Question[]
   createdAt: string
@@ -15,21 +17,28 @@ interface Survey {
 }
 
 export const useSurvey = () => {
+  const user = useCurrentUser()
+
   const getSurvey = (id: string): Survey | null => {
     const surveys = JSON.parse(localStorage.getItem('surveys') || '[]')
-    return surveys.find((survey: Survey) => survey.id === id) || null
+    return surveys.find((survey: Survey) => survey.id === id && survey.userId === user.value?.uid) || null
   }
 
   const listSurveys = (): Survey[] => {
-    return JSON.parse(localStorage.getItem('surveys') || '[]')
+    const surveys = JSON.parse(localStorage.getItem('surveys') || '[]')
+    return surveys.filter((survey: Survey) => survey.userId === user.value?.uid)
   }
 
-  const setSurvey = (survey: Omit<Survey, 'id' | 'createdAt'>, id?: string): Survey => {
+  const setSurvey = (survey: Omit<Survey, 'id' | 'createdAt' | 'userId'>, id?: string): Survey => {
     const surveys = JSON.parse(localStorage.getItem('surveys') || '[]')
+    
+    if (!user.value?.uid) {
+      throw new Error('User must be logged in to create or update surveys')
+    }
     
     if (id) {
       // Update existing survey
-      const index = surveys.findIndex((s: Survey) => s.id === id)
+      const index = surveys.findIndex((s: Survey) => s.id === id && s.userId === user.value?.uid)
       if (index !== -1) {
         const updatedSurvey = {
           ...surveys[index],
@@ -46,6 +55,7 @@ export const useSurvey = () => {
     const newSurvey = {
       ...survey,
       id: id || Date.now().toString(),
+      userId: user.value.uid,
       createdAt: new Date().toISOString()
     }
     

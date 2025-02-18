@@ -7,13 +7,6 @@
         <h1 class="text-3xl font-bold tracking-tight">{{ isEditing ? 'Edit Survey' : 'Create Survey' }}</h1>
         <p class="text-muted-foreground">{{ isEditing ? 'Modify your existing survey' : 'Create a new survey' }}</p>
       </div>
-      <Button
-        variant="outline"
-        @click="router.push('/list')"
-      >
-        <ArrowLeftIcon class="mr-2 h-4 w-4" />
-        Back to List
-      </Button>
     </div>
 
     <!-- Survey Form -->
@@ -113,9 +106,10 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useCurrentUser } from 'vuefire'
 import { useSurvey } from '~/composables/useSurvey'
 import { 
   ArrowLeft as ArrowLeftIcon,
@@ -136,10 +130,11 @@ const route = useRoute()
 const router = useRouter()
 const { getSurvey, setSurvey } = useSurvey()
 
-const isLoading = ref(false)
 const surveyName = ref('')
 const questions = ref([])
-const isEditing = computed(() => route.query.id)
+const isLoading = ref(false)
+
+const isEditing = computed(() => !!route.query.id)
 
 // Initialize empty question
 const createEmptyQuestion = () => ({
@@ -154,19 +149,20 @@ const addQuestion = () => {
 }
 
 // Remove question
-const removeQuestion = (index) => {
+const removeQuestion = (index: number) => {
   questions.value.splice(index, 1)
 }
 
 // Save survey
 const saveSurvey = async () => {
-  isLoading.value = true
   try {
-    const survey = {
+    isLoading.value = true
+    const surveyData = {
       name: surveyName.value,
-      questions: questions.value,
+      questions: questions.value
     }
-    await setSurvey(survey, isEditing.value ? route.query.id : undefined)
+    
+    await setSurvey(surveyData, isEditing.value ? route.query.id as string : undefined)
     router.push('/list')
   } catch (error) {
     console.error('Error saving survey:', error)
@@ -178,14 +174,15 @@ const saveSurvey = async () => {
 // Load existing survey if editing
 onMounted(() => {
   if (isEditing.value) {
-    const survey = getSurvey(route.query.id)
+    const survey = getSurvey(route.query.id as string)
     if (survey) {
       surveyName.value = survey.name
       questions.value = survey.questions
+    } else {
+      router.push('/list')
     }
   } else {
-    // Add first question by default for new surveys
-    addQuestion()
+    questions.value = [createEmptyQuestion()]
   }
 })
 </script>

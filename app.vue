@@ -2,15 +2,6 @@
   <div class="bg-background">
     <AppHeader>
       <template #actions>
-        <!-- Create Survey button on list page -->
-        <Button
-          v-if="route.path === '/list'"
-          @click="router.push('/create')"
-          class="inline-flex items-center justify-center"
-        >
-          <PlusIcon class="mr-2 h-4 w-4" />
-          Create Survey
-        </Button>
 
         <!-- Exit Survey button on chat page -->
         <Button 
