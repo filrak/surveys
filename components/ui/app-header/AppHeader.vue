@@ -26,10 +26,12 @@
       <div class="flex flex-1 items-center justify-between space-x-2 md:justify-end">
         <nav v-if="showNav" class="flex items-center">
           <NuxtLink
+            v-if="user"
             to="/list"
             class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background hover:bg-accent hover:text-accent-foreground h-10 py-2 px-4"
           >
-            Surveys
+            <ClipboardListIcon class="mr-2 h-4 w-4" />
+            My Surveys
           </NuxtLink>
           <a
             href="https://betterfeedbackhub.lemonsqueezy.com/buy/37441d8e-1d5c-4736-b152-0559c47ebd84"
@@ -96,7 +98,8 @@ import {
   LogIn as LogInIcon,
   LogOut as LogOutIcon,
   ChevronDown as ChevronDownIcon,
-  CreditCard as CreditCardIcon
+  CreditCard as CreditCardIcon,
+  ClipboardList as ClipboardListIcon
 } from 'lucide-vue-next'
 import ThemeSwitcher from '~/components/ui/theme-switcher/ThemeSwitcher.vue'
 import Button from '~/components/ui/button/Button.vue'

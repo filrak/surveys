@@ -7,7 +7,7 @@
             Tired of low-quality feedback?
           </h1>
           <p class="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-            Design intelligent surveys that adapt to your respondents. Get deeper insights with our AI-driven analysis.
+            Design intelligent surveys that adapt to your respondents and get the information you want. Get deeper insights with our AI-driven analysis.
           </p>
         </div>
         <div class="space-x-4">
