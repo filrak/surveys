@@ -25,7 +25,6 @@
 
       <div class="flex flex-1 items-center justify-between space-x-2 md:justify-end">
         <div class="flex items-center gap-2">
-          <ThemeSwitcher />
 
           <!-- Auth Button -->
           <NuxtLink
@@ -69,6 +68,8 @@
               Sign In
             </Button>
           </template>
+          <ThemeSwitcher />
+
           <!-- Page Actions -->
           <slot name="actions" />
         </div>
