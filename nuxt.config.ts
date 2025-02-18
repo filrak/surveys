@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   ssr: false,
+  css: ['~/assets/css/global.css'],
   modules: ['@nuxtjs/tailwindcss', 'nuxt-vuefire', 'shadcn-nuxt'],
   runtimeConfig: {
     public: {

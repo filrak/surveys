@@ -1,0 +1,17 @@
+/* Common layout classes */
+.section-padding {
+  @apply py-8 md:py-16 lg:py-24;
+}
+
+.container-padding {
+  @apply container mx-auto px-4 md:px-6 lg:px-8;
+}
+
+/* Common text styles */
+.section-title {
+  @apply text-3xl font-bold tracking-tight md:text-5xl;
+}
+
+.section-description {
+  @apply text-muted-foreground md:text-lg;
+}

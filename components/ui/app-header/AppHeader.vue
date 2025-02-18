@@ -24,7 +24,10 @@
       </div>
 
       <div class="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-        <nav v-if="showNav" class="flex items-center">
+        <div class="flex items-center gap-2">
+          <ThemeSwitcher />
+
+          <!-- Auth Button -->
           <NuxtLink
             v-if="user"
             to="/list"
@@ -33,20 +36,6 @@
             <ClipboardListIcon class="mr-2 h-4 w-4" />
             My Surveys
           </NuxtLink>
-          <a
-            href="https://betterfeedbackhub.lemonsqueezy.com/buy/37441d8e-1d5c-4736-b152-0559c47ebd84"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 h-10 py-2 px-4"
-          >
-            Buy
-          </a>
-        </nav>
-
-        <div class="flex items-center gap-2">
-          <ThemeSwitcher />
-
-          <!-- Auth Button -->
           <template v-if="user">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -68,6 +57,7 @@
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            
           </template>
           <template v-else>
             <Button 
@@ -79,6 +69,16 @@
               Sign In
             </Button>
           </template>
+          <nav class="flex items-center">
+          <a
+            href="https://betterfeedbackhub.lemonsqueezy.com/buy/37441d8e-1d5c-4736-b152-0559c47ebd84"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 h-10 py-2 px-4"
+          >
+            Start now
+          </a>
+        </nav>
 
           <!-- Page Actions -->
           <slot name="actions" />

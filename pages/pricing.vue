@@ -50,12 +50,12 @@ const tiers: PricingTier[] = [
 </script>
 
 <template>
-  <section class="relative w-full flex items-center py-8 md:py-16 lg:py-24">
-    <div class="container mx-auto px-4 md:px-6 lg:px-8">
+  <section class="section-padding">
+    <div class="container-padding">
       <!-- Header -->
       <div class="text-center space-y-4 mb-8 md:mb-12">
-        <h2 class="text-3xl font-bold tracking-tight md:text-5xl">Simple, transparent pricing</h2>
-        <p class="text-muted-foreground md:text-lg">
+        <h2 class="section-title">Simple, transparent pricing</h2>
+        <p class="section-description">
           Choose the perfect plan for your needs. Always know what you'll pay.
         </p>
       </div>

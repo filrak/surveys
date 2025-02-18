@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-background">
+  <div class="bg-background">
     <AppHeader>
       <template #actions>
         <!-- Create Survey button on list page -->
@@ -35,9 +35,9 @@
     </AppHeader>
 
     <NuxtRouteAnnouncer />
-    <div class="min-h-screen bg-background">
+    <main class="min-h-screen bg-background">
       <NuxtPage />
-    </div>
+    </main>
   </div>
 </template>
 

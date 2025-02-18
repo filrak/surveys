@@ -1,6 +1,6 @@
 <template>
-  <section class="relative w-full flex items-centerpy-8 md:py-16 lg:py-24">
-    <div class="container mx-auto px-4 md:px-6 lg:px-8">
+  <section class="section-padding">
+    <div class="container-padding">
       <div class="max-w-md mx-auto space-y-8">
         <!-- Header -->
         <div class="text-center space-y-2">
