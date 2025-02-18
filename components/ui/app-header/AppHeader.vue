@@ -7,6 +7,20 @@
           <ClipboardIcon class="h-6 w-6" />
           <span class="hidden font-bold sm:inline-block">AI Surveys</span>
         </NuxtLink>
+        <nav class="flex items-center space-x-2">
+          <NuxtLink
+            to="/"
+            class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background hover:bg-accent hover:text-accent-foreground h-10 py-2 px-4"
+          >
+            Home
+          </NuxtLink>
+          <NuxtLink
+            to="/pricing"
+            class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background hover:bg-accent hover:text-accent-foreground h-10 py-2 px-4"
+          >
+            Pricing
+          </NuxtLink>
+        </nav>
       </div>
 
       <div class="flex flex-1 items-center justify-between space-x-2 md:justify-end">
@@ -42,12 +56,8 @@
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem>
-                  <ScriptLemonSqueezy>
-                    <NuxtLink href="https://betterfeedbackhub.lemonsqueezy.com/buy/37441d8e-1d5c-4736-b152-0559c47ebd84?embed=1">
-                      <CreditCardIcon class="mr-2 h-4 w-4" />
-                      Buy Subscription ($9.99)
-                    </NuxtLink>
-                  </ScriptLemonSqueezy>
+                    <CreditCardIcon class="mr-2 h-4 w-4" />
+                    Buy Subscription ($9.99)
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem @click="handleSignOut">

@@ -20,9 +20,19 @@
 - `components/`
   - `ui/` - shadcn-vue components
     - `button/` - Button component
-    - `card/` - Card components (Card, CardHeader, CardContent, etc.)
-    - `input/` - Input component
-    - `label/` - Label component
+    - `card/` 
+      - `Card.vue` - Base card component from shadcn
+      - `CardContent.vue` - Card content component
+      - `CardHeader.vue` - Card header component
+      - `CardTitle.vue` - Card title component
+      - `CardFooter.vue` - Card footer component
+      - `index.ts` - Barrel file for card component exports
+    - `input/` 
+      - `Input.vue` - Base input component from shadcn
+      - `index.ts` - Barrel file for input component exports
+    - `label/` 
+      - `Label.vue` - Base label component from shadcn
+      - `index.ts` - Barrel file for label component exports
     - `app-header/` - Application header component
 
 ## Middleware

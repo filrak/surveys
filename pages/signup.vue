@@ -1,99 +1,137 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-background">
-    <Card class="w-full max-w-md">
-      <CardHeader>
-        <CardTitle>Create an account</CardTitle>
-        <CardDescription>Enter your details to sign up</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form @submit.prevent="handleAuthEmailSignup" class="space-y-4">
-          <div class="space-y-2">
-            <Label for="email">Email</Label>
-            <Input
-              id="email"
-              v-model.trim="email"
-              type="email"
-              placeholder="m@example.com"
-              required
-            />
-          </div>
-          
-          <div class="space-y-2">
-            <Label for="password">Password</Label>
-            <Input
-              id="password"
-              v-model.trim="password"
-              type="password"
-              required
-            />
-          </div>
+  <section class="relative w-full flex items-center bg-white py-8 md:py-16 lg:py-24">
+    <div class="container mx-auto px-4 md:px-6 lg:px-8">
+      <div class="max-w-md mx-auto space-y-8">
+        <!-- Header -->
+        <div class="text-center space-y-2">
+          <h1 class="text-3xl font-bold">Create an account</h1>
+          <p class="text-muted-foreground">Sign up to get started with our platform</p>
+        </div>
 
-          <div class="space-y-2">
-            <Label for="confirmPassword">Confirm Password</Label>
-            <Input
-              id="confirmPassword"
-              v-model.trim="confirmPassword"
-              type="password"
-              required
-            />
-          </div>
+        <!-- Social Login Buttons -->
+        <div class="grid grid-cols-1 gap-4">
+          <Button variant="outline" class="w-full" @click="handleAuthGoogleSignup">
+            <GoogleIcon class="mr-2 h-4 w-4" />
+            Google
+          </Button>
+        </div>
 
-          <div v-if="errorMessage" class="text-sm text-destructive text-center">
-            {{ errorMessage }}
+        <!-- Divider -->
+        <div class="relative">
+          <div class="absolute inset-0 flex items-center">
+            <span class="w-full border-t"></span>
           </div>
+          <div class="relative flex justify-center text-xs uppercase">
+            <span class="bg-background px-2 text-muted-foreground">Or continue with</span>
+          </div>
+        </div>
 
+        <!-- Signup Form -->
+        <form @submit.prevent="handleAuthEmailSignup" class="space-y-6">
           <div class="space-y-4">
-            <Button
-              type="submit"
-              class="w-full"
-              :disabled="isLoading"
-            >
-              <Loader2Icon v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
-              {{ isLoading ? 'Creating account...' : 'Sign up with Email' }}
-            </Button>
+            <!-- Full Name -->
+            <div class="space-y-2">
+              <Label for="name">Full Name</Label>
+              <div class="relative">
+                <User class="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+                <Input
+                  id="name"
+                  v-model="name"
+                  type="text"
+                  placeholder="John Doe"
+                  class="pl-10"
+                  required
+                />
+              </div>
+            </div>
 
-            <Button
-              type="button"
-              variant="outline"
-              class="w-full"
-              @click="handleAuthGoogleSignup"
-              :disabled="isLoading"
-            >
-              <img src="/google.svg" alt="Google" class="mr-2 h-4 w-4" />
-              Sign up with Google
-            </Button>
+            <!-- Email -->
+            <div class="space-y-2">
+              <Label for="email">Email</Label>
+              <div class="relative">
+                <Mail class="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+                <Input
+                  id="email"
+                  v-model="email"
+                  type="email"
+                  placeholder="john@example.com"
+                  class="pl-10"
+                  required
+                />
+              </div>
+            </div>
 
-            <div class="text-center text-sm text-muted-foreground">
-              Already have an account?{" "}
-              <NuxtLink to="/login" class="text-primary hover:underline">
-                Sign in
-              </NuxtLink>
+            <!-- Password -->
+            <div class="space-y-2">
+              <Label for="password">Password</Label>
+              <div class="relative">
+                <Lock class="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+                <Input
+                  id="password"
+                  v-model="password"
+                  type="password"
+                  placeholder="Create a password"
+                  class="pl-10"
+                  required
+                />
+              </div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="space-y-2">
+              <Label for="confirm-password">Confirm Password</Label>
+              <div class="relative">
+                <Lock class="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+                <Input
+                  id="confirm-password"
+                  v-model="confirmPassword"
+                  type="password"
+                  placeholder="Confirm your password"
+                  class="pl-10"
+                  required
+                />
+              </div>
+              <p v-if="errorMessage" class="text-sm text-red-500">{{ errorMessage }}</p>
             </div>
           </div>
+
+          <Button type="submit" class="w-full" :disabled="isLoading">
+            <Loader2 class="mr-2 h-4 w-4 animate-spin" v-if="isLoading" />
+            Create Account
+          </Button>
+
+          <p class="text-center text-sm text-muted-foreground">
+            Already have an account?
+            <NuxtLink to="/login" class="text-primary hover:underline">
+              Sign in
+            </NuxtLink>
+          </p>
         </form>
-      </CardContent>
-    </Card>
-  </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from '#app'
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile } from 'firebase/auth'
 import { useFirebaseAuth } from 'vuefire'
-import { Loader2Icon } from 'lucide-vue-next'
+import Button from '~/components/ui/button/Button.vue'
 import Input from '~/components/ui/input/Input.vue'
 import Label from '~/components/ui/label/Label.vue'
-import { Button } from '~/components/ui/button'
-import Card from '~/components/ui/card/Card.vue'
-import CardContent from '~/components/ui/card/CardContent.vue'
-import CardDescription from '~/components/ui/card/CardDescription.vue'
-import CardHeader from '~/components/ui/card/CardHeader.vue'
-import CardTitle from '~/components/ui/card/CardTitle.vue'
+import GoogleIcon from '~/components/icons/GoogleIcon.vue'
+import {
+  Mail,
+  Loader2,
+  User,
+  Lock
+} from 'lucide-vue-next'
 
 const router = useRouter()
 const auth = useFirebaseAuth()!
 
+const name = ref('')
 const email = ref('')
 const password = ref('')
 const confirmPassword = ref('')
@@ -111,7 +149,13 @@ async function handleAuthEmailSignup() {
   errorMessage.value = ''
 
   try {
-    await createUserWithEmailAndPassword(auth, email.value, password.value)
+    const userCredential = await createUserWithEmailAndPassword(auth, email.value, password.value)
+    // Update user profile with name
+    if (userCredential.user) {
+      await updateProfile(userCredential.user, {
+        displayName: name.value
+      })
+    }
     router.push('/list')
   } catch (error: any) {
     errorMessage.value = error.message
