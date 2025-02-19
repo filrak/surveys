@@ -1,0 +1,59 @@
+# Shadcn-vue Component Import Rules
+
+1. When importing shadcn-vue components, always use default imports, not named imports. These components are exported as default exports.
+
+Example:
+```vue
+// ❌ Wrong - Named import
+import { Button } from '@/components/ui/button/Button.vue'
+
+// ✅ Correct - Default import
+import Button from '@/components/ui/button/Button.vue'
+```
+
+2. For components with multiple parts (like Card, RadioGroup), each part needs to be imported separately as a default import:
+```vue
+// ❌ Wrong - Grouped named imports
+import { Card, CardHeader, CardTitle } from '@/components/ui/card'
+
+// ✅ Correct - Separate default imports
+import Card from '@/components/ui/card/Card.vue'
+import CardHeader from '@/components/ui/card/CardHeader.vue'
+import CardTitle from '@/components/ui/card/CardTitle.vue'
+```
+
+# Shadcn-vue Radio Group Implementation
+
+When implementing radio groups with custom UI (like card selection):
+
+1. The RadioGroup component should wrap the entire selection area
+2. RadioGroupItem components should be rendered separately from the custom UI
+3. Use standard HTML radio inputs with proper labels for accessibility
+4. Connect the radio inputs to the RadioGroup using v-model
+5. Use CSS/classes to style the selected state
+
+Example structure:
+```vue
+<RadioGroup v-model="selected">
+  <!-- Radio items for accessibility -->
+  <RadioGroupItem 
+    v-for="item in items" 
+    :value="item.id"
+    class="sr-only"
+  />
+  
+  <!-- Custom UI -->
+  <div v-for="item in items">
+    <label :for="item.id">
+      <Card :class="{ 'ring-2': selected === item.id }">
+        <!-- Card content -->
+      </Card>
+      <input 
+        type="radio" 
+        :id="item.id" 
+        v-model="selected"
+        class="sr-only"
+      />
+    </label>
+  </div>
+</RadioGroup>
