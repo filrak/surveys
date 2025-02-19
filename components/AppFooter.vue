@@ -32,7 +32,7 @@ const socialLinks = [
 </script>
 
 <template>
-  <section class="relative w-full flex items-center bg-white py-8 md:py-16 lg:py-24">
+  <section class="relative w-full flex items-center py-8 md:py-16 lg:py-24">
     <div class="container mx-auto px-4 md:px-6 lg:px-8">
       <div class="flex flex-col md:flex-row justify-between gap-12 lg:gap-40">
 
