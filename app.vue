@@ -29,12 +29,13 @@
     <main class="min-h-screen bg-background">
       <NuxtPage />
     </main>
+    <AppFooter />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
-import { PlusIcon, XIcon, ArrowLeftIcon } from 'lucide-vue-next'
+import { XIcon, ArrowLeftIcon } from 'lucide-vue-next'
 import AppHeader from '~/components/ui/app-header/AppHeader.vue'
 import Button from '~/components/ui/button/Button.vue'
 
