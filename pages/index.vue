@@ -4,5 +4,6 @@
     <SectionStats />
     <SectionFeatures />
     <SectionTestimonials />
+    <SectionPricing />
   </main>
 </template>
