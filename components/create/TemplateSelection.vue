@@ -110,7 +110,7 @@ const templates = [
       'Suggestions for improvement'
     ]
   }
-]
+] 
 </script>
 
 <style scoped>
