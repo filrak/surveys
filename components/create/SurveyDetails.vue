@@ -1,4 +1,3 @@
-# File: components/create/SurveyDetails.vue
 <template>
   <div class="space-y-8">
     <!-- Survey Name -->
