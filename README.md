@@ -74,10 +74,12 @@ bun run preview
 
 # TO-DO
 
-- Bind user to survey
 - Replace local storage with firebase
-- Add landing
-- Create priccing plans and limits
+- Finish landing
+- Create priccing plans in Stripe
 - Add token limits
-- Add presets for question rules
+- Add presets for question templates
+- Add questiosn generator absed on the prompt
+- Add Audio survey gathering
+- Customize surveys UI and add preview
 - Polish UI
