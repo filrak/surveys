@@ -83,7 +83,7 @@
         <ArrowLeft class="mr-2 h-4 w-4" />
         Back
       </Button>
-      <Button @click="$emit('save', surveyData)" :disabled="!isValid || isLoading">
+      <Button @click="$emit('save', surveyData)" :disabled="isLoading">
         <Loader2Icon v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
         {{ isLoading ? 'Saving...' : 'Save Survey' }}
       </Button>
@@ -92,7 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { 
   ArrowLeft,
   Trash2 as Trash2Icon,
@@ -128,12 +128,6 @@ const emit = defineEmits<{
 const surveyData = ref<SurveyData>(props.initialData || {
   name: '',
   questions: [createEmptyQuestion()]
-})
-
-const isValid = computed(() => {
-  return surveyData.value.name.trim() !== '' && 
-    surveyData.value.questions.length > 0 &&
-    surveyData.value.questions.every(q => q.text.trim() !== '')
 })
 
 // Initialize empty question
