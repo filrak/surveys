@@ -7,17 +7,19 @@
 
 ## Pages
 - `pages/`
-  - `index.vue` - Home page with a centered "Go to List" button
+  - `index.vue` - Home page listing all surveys with create/edit/delete functionality
   - `login.vue` - Authentication page with email and Google sign-in options
   - `signup.vue` - Registration page with email and Google sign-up options
-  - `list.vue` - Survey list page
-  - `create.vue` - Survey creation page
+  - `create.vue` - Survey creation page with template selection and customization
   - `chat/[id].vue` - Dynamic chat page for conducting surveys
   - `answers/[id].vue` - Survey answers view page
   - `subscribe.vue` - Subscription/pricing page
 
 ## Components
 - `components/`
+  - `create/` - Survey creation components
+    - `TemplateSelection.vue` - Survey template selection step
+    - `SurveyDetails.vue` - Survey questions customization step
   - `ui/` - shadcn-vue components
     - `button/` - Button component
     - `card/` 
@@ -33,7 +35,22 @@
     - `label/` 
       - `Label.vue` - Base label component from shadcn
       - `index.ts` - Barrel file for label component exports
+    - `textarea/`
+      - `Textarea.vue` - Base textarea component from shadcn
+      - `index.ts` - Barrel file for textarea component exports
+    - `radio-group/`
+      - `RadioGroup.vue` - Base radio group component from shadcn
+      - `RadioGroupItem.vue` - Radio group item component
+      - `index.ts` - Barrel file for radio group component exports
     - `app-header/` - Application header component
+
+## Data
+- `data/`
+  - `surveyTemplates.ts` - Predefined survey templates with questions and expected answers
+
+## Composables
+- `composables/`
+  - `useSurvey.ts` - Survey management functions (create, read, update, delete)
 
 ## Middleware
 - `middleware/`

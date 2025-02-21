@@ -46,39 +46,49 @@ import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCurrentUser } from 'vuefire'
 import { useSurvey } from '~/composables/useSurvey'
+import type { SurveyTemplate } from '~/data/surveyTemplates'
 
 // Import components
 import TemplateSelection from '~/components/create/TemplateSelection.vue'
 import SurveyDetails from '~/components/create/SurveyDetails.vue'
-import Card from '~/components/ui/card/Card.vue'
-import CardContent from '~/components/ui/card/CardContent.vue'
-
-const route = useRoute()
-const router = useRouter()
-const { getSurvey, setSurvey } = useSurvey()
+import { Card, CardContent } from '~/components/ui/card'
 
 const currentStep = ref(1)
 const isLoading = ref(false)
+const route = useRoute()
+const router = useRouter()
+const currentUser = useCurrentUser()
+const { setSurvey, getSurvey } = useSurvey()
+
+const isEditing = computed(() => Boolean(route.query.id))
+
+// Data for the survey
 const surveyData = ref({
   name: '',
-  questions: []
+  questions: [{
+    text: '',
+    expectedAnswer: '',
+    unwantedAnswer: ''
+  }]
 })
 
-const isEditing = computed(() => !!route.query.id)
-
 // Template selection handler
-const handleTemplateSelection = (templateId: string) => {
-  // Here we will load the template questions
-  // For now, just move to next step
+const handleTemplateSelection = (template: SurveyTemplate) => {
+  surveyData.value = {
+    name: template.title,
+    questions: [...template.questions]
+  }
   currentStep.value = 2
 }
 
 // Save survey
-const saveSurvey = async (data) => {
+const saveSurvey = async (data: typeof surveyData.value) => {
+  if (!currentUser.value) return
+  
+  isLoading.value = true
   try {
-    isLoading.value = true
     await setSurvey(data, isEditing.value ? route.query.id as string : undefined)
-    router.push('/list')
+    router.push('/list') 
   } catch (error) {
     console.error('Error saving survey:', error)
   } finally {
@@ -91,9 +101,6 @@ if (isEditing.value) {
   const survey = getSurvey(route.query.id as string)
   if (survey) {
     surveyData.value = survey
-    currentStep.value = 2 // Skip template selection when editing
-  } else {
-    router.push('/list')
   }
 }
 </script>

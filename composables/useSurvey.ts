@@ -65,9 +65,26 @@ export const useSurvey = () => {
     return newSurvey
   }
 
+  const deleteSurvey = (id: string): void => {
+    if (!user.value?.uid) {
+      throw new Error('User must be logged in to delete surveys')
+    }
+
+    const surveys = JSON.parse(localStorage.getItem('surveys') || '[]')
+    const index = surveys.findIndex((s: Survey) => s.id === id && s.userId === user.value?.uid)
+    
+    if (index === -1) {
+      throw new Error('Survey not found or you do not have permission to delete it')
+    }
+
+    surveys.splice(index, 1)
+    localStorage.setItem('surveys', JSON.stringify(surveys))
+  }
+
   return {
     getSurvey,
+    listSurveys,
     setSurvey,
-    listSurveys
+    deleteSurvey
   }
 }

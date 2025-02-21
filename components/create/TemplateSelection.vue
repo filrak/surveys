@@ -39,7 +39,7 @@
     </RadioGroup>
 
     <div class="flex justify-end">
-      <Button @click="$emit('next', selectedTemplate)" :disabled="!selectedTemplate">
+      <Button @click="handleNext" :disabled="!selectedTemplate">
         Continue
         <ArrowRight class="ml-2 h-4 w-4" />
       </Button>
@@ -50,67 +50,34 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ArrowRight } from 'lucide-vue-next'
-import Card from '@/components/ui/card/Card.vue'
-import CardHeader from '@/components/ui/card/CardHeader.vue'
-import CardTitle from '@/components/ui/card/CardTitle.vue'
-import CardDescription from '@/components/ui/card/CardDescription.vue'
-import CardContent from '@/components/ui/card/CardContent.vue'
-import RadioGroup from '@/components/ui/radio-group/RadioGroup.vue'
-import RadioGroupItem from '@/components/ui/radio-group/RadioGroupItem.vue'
+import { surveyTemplates, type SurveyTemplate } from '@/data/surveyTemplates'
 import Button from '@/components/ui/button/Button.vue'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from '@/components/ui/radio-group'
+
+const selectedTemplate = ref<string>('')
 
 const emit = defineEmits<{
-  (e: 'next', templateId: string): void
+  (e: 'next', template: SurveyTemplate): void
 }>()
 
-const selectedTemplate = ref('')
-
-const templates = [
-  {
-    id: 'customer-feedback',
-    title: 'Customer Feedback',
-    description: 'Perfect for gathering feedback about your product or service',
-    features: [
-      'Product satisfaction questions',
-      'Service quality evaluation',
-      'Net Promoter Score (NPS)',
-      'Open-ended feedback questions'
-    ]
-  },
-  {
-    id: 'market-research',
-    title: 'Market Research',
-    description: 'Understand your target market and customer preferences',
-    features: [
-      'Demographics questions',
-      'Product preferences',
-      'Purchase behavior',
-      'Competitor analysis'
-    ]
-  },
-  {
-    id: 'employee-satisfaction',
-    title: 'Employee Satisfaction',
-    description: 'Measure employee engagement and workplace satisfaction',
-    features: [
-      'Work environment assessment',
-      'Job satisfaction metrics',
-      'Career development feedback',
-      'Management effectiveness'
-    ]
-  },
-  {
-    id: 'event-feedback',
-    title: 'Event Feedback',
-    description: 'Collect feedback from event attendees',
-    features: [
-      'Event organization rating',
-      'Content quality assessment',
-      'Speaker/presenter feedback',
-      'Suggestions for improvement'
-    ]
+const handleNext = () => {
+  const template = surveyTemplates.find(t => t.id === selectedTemplate.value)
+  if (template) {
+    emit('next', template)
   }
-] 
+}
+
+const templates = surveyTemplates
 </script>
 
 <style scoped>

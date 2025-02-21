@@ -34,7 +34,7 @@
             <Label :for="'question-' + index">Question Text</Label>
             <Textarea
               :id="'question-' + index"
-              v-model="question.text"
+              v-model="surveyData.questions[index].text"
               placeholder="Enter your question"
               :disabled="isLoading"
             />
@@ -45,7 +45,7 @@
             <Label :for="'answer-' + index">Expected Answer</Label>
             <Textarea
               :id="'answer-' + index"
-              v-model="question.expectedAnswer"
+              v-model="surveyData.questions[index].expectedAnswer"
               placeholder="Describe what kind of answer you expect"
               :disabled="isLoading"
             />
@@ -56,7 +56,7 @@
             <Label :for="'unwanted-answer-' + index">Unwanted Answer</Label>
             <Textarea
               :id="'unwanted-answer-' + index"
-              v-model="question.unwantedAnswer"
+              v-model="surveyData.questions[index].unwantedAnswer"
               placeholder="Describe what kind of answer you want to avoid"
               :disabled="isLoading"
             />
@@ -92,7 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive } from 'vue'
 import { 
   ArrowLeft,
   Trash2 as Trash2Icon,
@@ -125,7 +125,7 @@ const emit = defineEmits<{
   (e: 'save', data: SurveyData): void
 }>()
 
-const surveyData = ref<SurveyData>(props.initialData || {
+const surveyData = reactive<SurveyData>(props.initialData || {
   name: '',
   questions: [createEmptyQuestion()]
 })
@@ -141,11 +141,11 @@ function createEmptyQuestion(): Question {
 
 // Add new question
 function addQuestion() {
-  surveyData.value.questions.push(createEmptyQuestion())
+  surveyData.questions.push(createEmptyQuestion())
 }
 
 // Remove question
 function removeQuestion(index: number) {
-  surveyData.value.questions.splice(index, 1)
+  surveyData.questions.splice(index, 1)
 }
 </script>
