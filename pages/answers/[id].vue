@@ -2,15 +2,23 @@
   <div class="min-h-screen bg-background">
     <div class="container mx-auto py-8">
       <div class="mb-8">
-        <h1 class="text-2xl font-bold tracking-tight">{{ survey?.name || 'Survey' }} Answers</h1>
+        <h1 class="text-2xl font-bold tracking-tight mb-2">{{ survey?.name || 'Survey' }} Answers</h1>
         <p class="text-sm text-muted-foreground">
-          {{ answers.length }} {{ answers.length === 1 ? 'response' : 'responses' }} collected
+          {{ filteredAnswers.length }} {{ filteredAnswers.length === 1 ? 'response' : 'responses' }} collected
         </p>
+      </div>
+
+      <!-- Filter -->
+      <div class="mb-6 max-w-sm">
+        <Filter
+          v-model="filterStatus"
+          :options="filterOptions"
+        />
       </div>
 
       <!-- List of Answers -->
       <div class="space-y-6">
-        <Card v-for="answer in sortedAnswers" :key="answer.id" class="p-6">
+        <Card v-for="answer in filteredAnswers" :key="answer.id" class="p-6">
           <!-- Answer Header -->
           <div class="flex justify-between items-start mb-6">
             <div class="space-y-1">
@@ -29,19 +37,31 @@
           </div>
 
           <!-- Answer Summary -->
-          <div v-if="answer.summary" class="mb-6">
+          <div class="mb-6">
             <Card class="bg-muted">
               <CardHeader>
                 <CardTitle class="text-base">Summary</CardTitle>
               </CardHeader>
               <CardContent>
-                <p class="text-sm">{{ answer.summary }}</p>
+                <p class="text-sm">{{ answer.summary || 'No summary available' }}</p>
               </CardContent>
             </Card>
           </div>
 
+          <!-- Toggle Conversation Button -->
+          <Button 
+            variant="outline" 
+            class="w-full mb-4"
+            @click="toggleConversation(answer.id)"
+          >
+            <span class="flex items-center">
+              <span class="mr-2">{{ expandedAnswers.has(answer.id) ? 'Hide' : 'Show' }} Conversation</span>
+              <component :is="expandedAnswers.has(answer.id) ? ChevronUpIcon : ChevronDownIcon" class="h-4 w-4" />
+            </span>
+          </Button>
+
           <!-- Conversation -->
-          <div class="space-y-4">
+          <div v-if="expandedAnswers.has(answer.id)" class="space-y-4">
             <ChatBubble
               v-for="(message, index) in answer.conversation"
               :key="index"
@@ -79,7 +99,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCurrentUser } from 'vuefire'
-import { InboxIcon, MessageSquareIcon } from 'lucide-vue-next'
+import { InboxIcon, MessageSquareIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-vue-next'
 import ChatBubble from '~/components/ChatBubble.vue'
 import Card from '~/components/ui/card/Card.vue'
 import CardHeader from '~/components/ui/card/CardHeader.vue'
@@ -87,6 +107,7 @@ import CardContent from '~/components/ui/card/CardContent.vue'
 import CardTitle from '~/components/ui/card/CardTitle.vue'
 import Button from '~/components/ui/button/Button.vue'
 import Badge from '~/components/ui/badge/Badge.vue'
+import Filter from '~/components/ui/filter/Filter.vue'
 import { useAnswer } from '~/composables/useAnswer'
 import { useSurvey } from '~/composables/useSurvey'
 
@@ -98,13 +119,37 @@ const { getSurvey } = useSurvey()
 
 const survey = ref(null)
 const answers = ref([])
+const expandedAnswers = ref(new Set())
+const filterStatus = ref('all')
 
-// Sort answers by creation date, newest first
+const filterOptions = [
+  { label: 'All', value: 'all' },
+  { label: 'Completed', value: 'completed' },
+  { label: 'In Progress', value: 'in-progress' }
+]
+
 const sortedAnswers = computed(() => {
   return [...answers.value].sort((a, b) => 
     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   )
 })
+
+const filteredAnswers = computed(() => {
+  if (filterStatus.value === 'all') return sortedAnswers.value
+  
+  return sortedAnswers.value.filter(answer => {
+    if (filterStatus.value === 'completed') return answer.finished
+    return !answer.finished
+  })
+})
+
+const toggleConversation = (answerId) => {
+  if (expandedAnswers.value.has(answerId)) {
+    expandedAnswers.value.delete(answerId)
+  } else {
+    expandedAnswers.value.add(answerId)
+  }
+}
 
 const formatDate = (date) => {
   return new Intl.RelativeTimeFormat('en', { numeric: 'auto' }).format(

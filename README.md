@@ -82,4 +82,5 @@ bun run preview
 - Add questiosn generator absed on the prompt
 - Add Audio survey gathering
 - Customize surveys UI and add preview
-- Polish UI
+- Add user owners of specific surveys
+

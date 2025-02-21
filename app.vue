@@ -2,25 +2,14 @@
   <div class="bg-background">
     <AppHeader>
       <template #actions>
-
         <!-- Exit Survey button on chat page -->
         <Button 
           v-if="route.path.startsWith('/chat/')"
           variant="outline"
-          @click="router.push('/list')"
+          @click="router.push('/')"
         >
           <XIcon class="mr-2 h-4 w-4" />
           Exit Survey
-        </Button>
-
-        <!-- Back button on answers page -->
-        <Button 
-          v-if="route.path.startsWith('/answers/')"
-          variant="outline"
-          @click="router.push('/list')"
-        >
-          <ArrowLeftIcon class="mr-2 h-4 w-4" />
-          Back to Surveys
         </Button>
       </template>
     </AppHeader>
@@ -35,7 +24,7 @@
 
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
-import { XIcon, ArrowLeftIcon } from 'lucide-vue-next'
+import { XIcon } from 'lucide-vue-next'
 import AppHeader from '~/components/ui/app-header/AppHeader.vue'
 import Button from '~/components/ui/button/Button.vue'
 
