@@ -3,9 +3,22 @@
     <div class="container mx-auto py-8">
       <div class="mb-8">
         <h1 class="text-2xl font-bold tracking-tight mb-2">{{ survey?.name || 'Survey' }} Answers</h1>
-        <p class="text-sm text-muted-foreground">
-          {{ filteredAnswers.length }} {{ filteredAnswers.length === 1 ? 'response' : 'responses' }} collected
-        </p>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid gap-4 md:grid-cols-2 mb-8">
+        <StatBox
+          :icon="CheckCircleIcon"
+          label="Completed Surveys"
+          :value="completedAnswers.length"
+          :description="`Out of ${answers.length} total responses`"
+        />
+        <StatBox
+          :icon="PercentIcon"
+          label="Completion Rate"
+          :value="`${completionRatio}%`"
+          description="Percentage of completed surveys"
+        />
       </div>
 
       <!-- Filter -->
@@ -99,7 +112,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCurrentUser } from 'vuefire'
-import { InboxIcon, MessageSquareIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-vue-next'
+import { InboxIcon, MessageSquareIcon, ChevronDownIcon, ChevronUpIcon, CheckCircleIcon, PercentIcon } from 'lucide-vue-next'
 import ChatBubble from '~/components/ChatBubble.vue'
 import Card from '~/components/ui/card/Card.vue'
 import CardHeader from '~/components/ui/card/CardHeader.vue'
@@ -108,6 +121,7 @@ import CardTitle from '~/components/ui/card/CardTitle.vue'
 import Button from '~/components/ui/button/Button.vue'
 import Badge from '~/components/ui/badge/Badge.vue'
 import Filter from '~/components/ui/filter/Filter.vue'
+import StatBox from '~/components/ui/stat-box/StatBox.vue'
 import { useAnswer } from '~/composables/useAnswer'
 import { useSurvey } from '~/composables/useSurvey'
 
@@ -141,6 +155,15 @@ const filteredAnswers = computed(() => {
     if (filterStatus.value === 'completed') return answer.finished
     return !answer.finished
   })
+})
+
+const completedAnswers = computed(() => 
+  answers.value.filter(answer => answer.finished)
+)
+
+const completionRatio = computed(() => {
+  if (!answers.value.length) return 0
+  return Math.round((completedAnswers.value.length / answers.value.length) * 100)
 })
 
 const toggleConversation = (answerId) => {
