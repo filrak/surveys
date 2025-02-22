@@ -21,6 +21,37 @@
         />
       </div>
 
+      <!-- Global Question Section -->
+      <Card class="mb-8 p-6">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold">Analyze All Responses</h3>
+            <Badge variant="outline">AI Powered</Badge>
+          </div>
+          <p class="text-sm text-muted-foreground">
+            Ask questions about all survey responses to get insights and patterns.
+          </p>
+          <div class="flex gap-2">
+            <Input 
+              v-model="globalQuestion" 
+              placeholder="Ask a question about all responses (e.g., 'What are the common themes?')"
+              class="flex-1"
+            />
+            <Button 
+              :disabled="isLoading || !globalQuestion" 
+              @click="handleGlobalQuestion"
+            >
+              <Loader2Icon v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
+              Analyze
+            </Button>
+          </div>
+          <div v-if="globalAnswer" class="p-4 bg-muted rounded-lg">
+            <div class="font-medium mb-2">Analysis:</div>
+            <div class="text-sm whitespace-pre-wrap">{{ globalAnswer }}</div>
+          </div>
+        </div>
+      </Card>
+
       <!-- Filter -->
       <div class="mb-6 max-w-sm">
         <Filter
@@ -112,7 +143,8 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCurrentUser } from 'vuefire'
-import { InboxIcon, MessageSquareIcon, ChevronDownIcon, ChevronUpIcon, CheckCircleIcon, PercentIcon } from 'lucide-vue-next'
+import { InboxIcon, MessageSquareIcon, ChevronDownIcon, ChevronUpIcon, CheckCircleIcon, PercentIcon, Loader2Icon } from 'lucide-vue-next'
+import Input from '~/components/ui/input/Input.vue'
 import ChatBubble from '~/components/ChatBubble.vue'
 import Card from '~/components/ui/card/Card.vue'
 import CardHeader from '~/components/ui/card/CardHeader.vue'
@@ -128,12 +160,15 @@ import { useSurvey } from '~/composables/useSurvey'
 const route = useRoute()
 const router = useRouter()
 const user = useCurrentUser()
-const { getAnswers } = useAnswer()
+const { getAnswers, askQuestionAboutAnswers } = useAnswer()
 const { getSurvey } = useSurvey()
 
 const survey = ref(null)
 const answers = ref([])
 const expandedAnswers = ref(new Set())
+const globalQuestion = ref('')
+const globalAnswer = ref('')
+const isLoading = ref(false)
 const filterStatus = ref('all')
 
 const filterOptions = [
@@ -179,6 +214,21 @@ const formatDate = (date) => {
     Math.round((new Date(date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)),
     'day'
   )
+}
+
+const handleGlobalQuestion = async () => {
+  if (!globalQuestion.value || isLoading.value) return
+
+  isLoading.value = true
+  try {
+    const answer = await askQuestionAboutAnswers(route.params.id as string, globalQuestion.value)
+    globalAnswer.value = answer
+    globalQuestion.value = '' // Clear input after successful question
+  } catch (error) {
+    console.error('Error asking question:', error)
+  } finally {
+    isLoading.value = false
+  }
 }
 
 onMounted(() => {

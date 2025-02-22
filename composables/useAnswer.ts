@@ -81,9 +81,36 @@ export const useAnswer = () => {
     return answers.find(answer => answer.id === answerId)
   }
 
+  const askQuestionAboutAnswers = async (surveyId: string, question: string): Promise<string> => {
+    const answers = getAnswers(surveyId)
+    if (!answers.length) throw new Error('No answers found for this survey')
+
+    try {
+      const response = await fetch('/api/ask', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          answers,
+          question
+        }),
+      })
+
+      if (!response.ok) throw new Error('Failed to get answer')
+      
+      const data = await response.json()
+      return data.answer
+    } catch (error: any) {
+      console.error('Error asking question:', error)
+      throw error
+    }
+  }
+
   return {
     saveAnswer,
     getAnswers,
-    getAnswer
+    getAnswer,
+    askQuestionAboutAnswers
   }
 }
