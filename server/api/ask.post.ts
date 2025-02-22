@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
           content: `Here are all the survey responses:\n\n${context}\n\nQuestion: ${question}\n\nProvide a comprehensive analysis focusing on patterns and insights across all responses.`
         }
       ],
-      model: 'gpt-4-turbo-preview',
+      model: 'gpt-4o-mini',
     })
 
     return {

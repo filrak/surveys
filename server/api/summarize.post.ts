@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
           content: `Please summarize this survey conversation:\n${conversation.map(msg => `${msg.type.toUpperCase()}: ${msg.content}`).join('\n')}`
         }
       ],
-      model: 'gpt-4',
+      model: 'gpt-4o-mini',
       temperature: 0.7,
     })
 
