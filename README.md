@@ -77,8 +77,12 @@ bun run preview
 - Replace local storage with firebase
 - Finish landing
 - Create pricing plans in Stripe
-- Add token limits
-- Add questiosn generator based on the prompt
-- Add Audio survey gathering
+- Add token limits for accounts (hidden)
 - Customize surveys UI and add preview
-- Add user owners of specific surveys
+- Linkable answers
+- Linkable surveys
+- Add orgs
+
+# NTH
+- Add Audio survey gathering
+- Add questiosn generator based on the prompt
