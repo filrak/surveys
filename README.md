@@ -76,11 +76,9 @@ bun run preview
 
 - Replace local storage with firebase
 - Finish landing
-- Create priccing plans in Stripe
+- Create pricing plans in Stripe
 - Add token limits
-- Add presets for question templates
-- Add questiosn generator absed on the prompt
+- Add questiosn generator based on the prompt
 - Add Audio survey gathering
 - Customize surveys UI and add preview
 - Add user owners of specific surveys
-- Chat in feedback answers that you cna use to ask about specific thinsg from all the surveys
