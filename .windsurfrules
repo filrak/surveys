@@ -1,13 +1,21 @@
+## what the application is about
+
 This is an application for conducting surveys based on the AI chat.
 
 The functionality of the application is divided into two parts:
 1. The part where a survey is conducted, it's a simple chat window that is supposed to collect and save answers tot he survey
 2. A survey creation page where we set up the questions and describe what kind of answers we expect.
 
+## Tech stack
+
 For conveniance, let's use local storage to store the answers and questions.
 Use shadcn-vue for ui, style additionally with tailwind if needed but always try to use native shadcn first.
 
 Use firebase for authentication (vue-firstore for Nuxt 3).
+
+Don't use TypeScript and when you encoutner it, remove it. Keep it only if it helps you in generating better results and understanding codebase better.
+
+## How to work with the codebase effectively
 
 Check .filestructure to understand what files are in the repository and what are their responsibilities.
 
@@ -15,4 +23,3 @@ Every time you make changes to a file or add a file, add a file structure in the
 
 Every time I point you a mistake, analyze what is the root cause of it and add instructions in .tips that will prevent making it in the future. Use this file before making changes to the codebase.
 
-Don't use TypeScript and when you encoutner it, remove it. Keep it only if it helps you in generating better results and understanding codebase better.

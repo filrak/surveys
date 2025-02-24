@@ -35,11 +35,12 @@
             <Input 
               v-model="globalQuestion" 
               placeholder="Ask a question about all responses (e.g., 'What are the common themes?')"
-              class="flex-1"
+              class="flex-1 h-10"
             />
             <Button 
               :disabled="isLoading || !globalQuestion" 
               @click="handleGlobalQuestion"
+              size="lg"
             >
               <Loader2Icon v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
               Analyze

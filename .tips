@@ -57,3 +57,21 @@ Example structure:
     </label>
   </div>
 </RadioGroup>
+```
+
+# Component Sizing Consistency
+
+When working with shadcn-vue components that need to have consistent sizing:
+
+1. Check the component's variant definitions first (especially for Button components which have predefined size variants)
+2. For buttons, use the size prop to match other components:
+   - default: h-9
+   - sm: h-8
+   - lg: h-10
+
+3. When matching sizes between different component types:
+   - Either use the same size variant if both components support it
+   - Or explicitly set the height on the component that doesn't have size variants
+   - Example: `<Input class="h-10" />` with `<Button size="lg" />`
+
+4. Avoid setting height on the container div when components have their own height definitions
