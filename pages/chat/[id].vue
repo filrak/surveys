@@ -188,13 +188,20 @@ const messagesContainer = ref(null)
 
 onMounted(async () => {
   // Load survey
-  const surveyData = getSurvey(route.params.id)
+  const surveyData = await getSurvey(route.params.id)
   if (!surveyData) {
     router.push('/')
     return
   }
   
   survey.value = surveyData
+  
+  // Check if survey has questions
+  if (!survey.value.questions?.length) {
+    console.error('Survey has no questions')
+    router.push('/')
+    return
+  }
   
   // Always start a new chat
   const initialMessage = {
@@ -207,8 +214,8 @@ ${survey.value.questions[0].text}`
   }
   messages.value = [initialMessage]
   
-  // Save initial state with a new UUID
+  // Save initial state using survey ID
   const { saveAnswer } = useAnswer()
-  saveAnswer(crypto.randomUUID(), messages.value, false)
+  saveAnswer(route.params.id, messages.value, false)
 })
 </script>

@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { useCurrentUser } from 'vuefire'
+import { useFirestoreDB } from './useFirestore'
 
 interface Question {
   text: string
@@ -18,67 +19,32 @@ interface Survey {
 
 export const useSurvey = () => {
   const user = useCurrentUser()
+  const { getSurvey: getFirestoreSurvey, listSurveys: listFirestoreSurveys, setSurvey: setFirestoreSurvey, deleteSurvey: deleteFirestoreSurvey } = useFirestoreDB()
 
-  const getSurvey = (id: string): Survey | null => {
-    const surveys = JSON.parse(localStorage.getItem('surveys') || '[]')
-    return surveys.find((survey: Survey) => survey.id === id && survey.userId === user.value?.uid) || null
+  const getSurvey = async (id: string): Promise<Survey | null> => {
+    if (!user.value?.uid) return null
+    return getFirestoreSurvey(id, user.value.uid)
   }
 
-  const listSurveys = (): Survey[] => {
-    const surveys = JSON.parse(localStorage.getItem('surveys') || '[]')
-    return surveys.filter((survey: Survey) => survey.userId === user.value?.uid)
+  const listSurveys = async (): Promise<Survey[]> => {
+    if (!user.value?.uid) return []
+    return listFirestoreSurveys(user.value.uid)
   }
 
-  const setSurvey = (survey: Omit<Survey, 'id' | 'createdAt' | 'userId'>, id?: string): Survey => {
-    const surveys = JSON.parse(localStorage.getItem('surveys') || '[]')
-    
+  const setSurvey = async (survey: Omit<Survey, 'id' | 'createdAt' | 'userId'>, id?: string): Promise<Survey> => {
     if (!user.value?.uid) {
       throw new Error('User must be logged in to create or update surveys')
     }
     
-    if (id) {
-      // Update existing survey
-      const index = surveys.findIndex((s: Survey) => s.id === id && s.userId === user.value?.uid)
-      if (index !== -1) {
-        const updatedSurvey = {
-          ...surveys[index],
-          ...survey,
-          updatedAt: new Date().toISOString()
-        }
-        surveys[index] = updatedSurvey
-        localStorage.setItem('surveys', JSON.stringify(surveys))
-        return updatedSurvey
-      }
-    }
-    
-    // Create new survey
-    const newSurvey = {
-      ...survey,
-      id: id || Date.now().toString(),
-      userId: user.value.uid,
-      createdAt: new Date().toISOString()
-    }
-    
-    surveys.push(newSurvey)
-    localStorage.setItem('surveys', JSON.stringify(surveys))
-    
-    return newSurvey
+    return setFirestoreSurvey(survey, user.value.uid, id)
   }
 
-  const deleteSurvey = (id: string): void => {
+  const deleteSurvey = async (id: string): Promise<void> => {
     if (!user.value?.uid) {
       throw new Error('User must be logged in to delete surveys')
     }
 
-    const surveys = JSON.parse(localStorage.getItem('surveys') || '[]')
-    const index = surveys.findIndex((s: Survey) => s.id === id && s.userId === user.value?.uid)
-    
-    if (index === -1) {
-      throw new Error('Survey not found or you do not have permission to delete it')
-    }
-
-    surveys.splice(index, 1)
-    localStorage.setItem('surveys', JSON.stringify(surveys))
+    return deleteFirestoreSurvey(id, user.value.uid)
   }
 
   return {

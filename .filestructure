@@ -20,6 +20,7 @@
   - `create/` - Survey creation components
     - `TemplateSelection.vue` - Survey template selection step
     - `SurveyDetails.vue` - Survey questions customization step
+  - `FirestoreInit.vue` - Handles Firestore collections initialization on app start
   - `ui/` - shadcn-vue components
     - `button/` - Button component
     - `card/` 
@@ -51,10 +52,18 @@
 ## Composables
 - `composables/`
   - `useSurvey.ts` - Survey management functions (create, read, update, delete)
+  - `useCollectionInit.ts` - Firestore collections initialization logic
 
 ## Middleware
 - `middleware/`
   - `auth.global.js` - Global authentication middleware (excludes home, login, and signup pages)
+
+## Server
+- `server/`
+  - `api/`
+    - `init-collections.ts` - API endpoint for initializing Firestore collections
+  - `plugins/`
+    - `firebase-admin.ts` - Firebase Admin SDK initialization
 
 ## Assets
 - `public/`

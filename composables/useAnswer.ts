@@ -18,27 +18,42 @@ export const useAnswer = () => {
     const now = new Date().toISOString()
     const existingAnswers = JSON.parse(localStorage.getItem('answers') || '[]') as Answer[]
     
-    const answer: Answer = {
-      id: crypto.randomUUID(),
-      surveyId,
-      conversation,
-      finished,
-      createdAt: now,
-      updatedAt: now
+    // Try to find existing answer for this survey
+    const existingAnswerIndex = existingAnswers.findIndex(a => a.surveyId === surveyId)
+    
+    if (existingAnswerIndex !== -1) {
+      // Update existing answer
+      existingAnswers[existingAnswerIndex] = {
+        ...existingAnswers[existingAnswerIndex],
+        conversation,
+        finished,
+        updatedAt: now
+      }
+    } else {
+      // Create new answer only if one doesn't exist
+      const answer: Answer = {
+        id: crypto.randomUUID(),
+        surveyId,
+        conversation,
+        finished,
+        createdAt: now,
+        updatedAt: now
+      }
+      existingAnswers.push(answer)
     }
-
-    // Add new answer to the list
-    existingAnswers.push(answer)
     
     // If answer is finished, generate summary
     if (finished) {
-      generateSummary(answer.id, conversation)
+      const answer = existingAnswers[existingAnswerIndex]
+      if (answer) {
+        generateSummary(answer.id, conversation)
+      }
     }
 
     // Save all answers
     localStorage.setItem('answers', JSON.stringify(existingAnswers))
 
-    return answer
+    return existingAnswers[existingAnswerIndex] || existingAnswers[existingAnswers.length - 1]
   }
 
   const generateSummary = async (answerId: string, conversation: Message[]) => {
@@ -52,13 +67,12 @@ export const useAnswer = () => {
       })
 
       if (!response.ok) {
-        console.error('Failed to generate summary')
-        return
+        throw new Error('Failed to generate summary')
       }
 
       const { summary } = await response.json()
-      
-      // Update the specific answer with the summary
+
+      // Update answer with summary
       const existingAnswers = JSON.parse(localStorage.getItem('answers') || '[]') as Answer[]
       const answerIndex = existingAnswers.findIndex(a => a.id === answerId)
       
@@ -67,50 +81,39 @@ export const useAnswer = () => {
         localStorage.setItem('answers', JSON.stringify(existingAnswers))
       }
     } catch (error) {
-      console.error('Error generating summary:', error)
+      console.error('Failed to generate summary:', error)
     }
+  }
+
+  const getAnswer = (answerId: string): Answer | null => {
+    const answers = JSON.parse(localStorage.getItem('answers') || '[]') as Answer[]
+    return answers.find(a => a.id === answerId) || null
   }
 
   const getAnswers = (surveyId: string): Answer[] => {
     const answers = JSON.parse(localStorage.getItem('answers') || '[]') as Answer[]
-    return answers.filter(answer => answer.surveyId === surveyId)
+    return answers.filter(a => a.surveyId === surveyId)
   }
 
-  const getAnswer = (answerId: string): Answer | undefined => {
-    const answers = JSON.parse(localStorage.getItem('answers') || '[]') as Answer[]
-    return answers.find(answer => answer.id === answerId)
-  }
+  const prepareAnswers = (conversation: Message[]): { [key: string]: string } => {
+    const answers: { [key: string]: string } = {}
+    let currentQuestion = ''
 
-  const askQuestionAboutAnswers = async (surveyId: string, question: string): Promise<string> => {
-    const answers = getAnswers(surveyId)
-    if (!answers.length) throw new Error('No answers found for this survey')
+    conversation.forEach(message => {
+      if (message.type === 'bot' && !message.content.includes('QUESTION ANSWERED')) {
+        currentQuestion = message.content
+      } else if (message.type === 'user') {
+        answers[currentQuestion] = message.content
+      }
+    })
 
-    try {
-      const response = await fetch('/api/ask', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          answers,
-          question
-        }),
-      })
-
-      if (!response.ok) throw new Error('Failed to get answer')
-      
-      const data = await response.json()
-      return data.answer
-    } catch (error: any) {
-      console.error('Error asking question:', error)
-      throw error
-    }
+    return answers
   }
 
   return {
     saveAnswer,
-    getAnswers,
     getAnswer,
-    askQuestionAboutAnswers
+    getAnswers,
+    prepareAnswers
   }
 }

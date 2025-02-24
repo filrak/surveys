@@ -75,3 +75,33 @@ When working with shadcn-vue components that need to have consistent sizing:
    - Example: `<Input class="h-10" />` with `<Button size="lg" />`
 
 4. Avoid setting height on the container div when components have their own height definitions
+
+# State Management in Chat-Based Surveys
+
+When managing state in chat-based surveys:
+
+1. Always use a unique identifier (like survey ID) as the key for storing and updating chat state
+2. Update existing state instead of creating new records:
+   ```js
+   // ❌ Wrong - Creating new record each time
+   const saveState = () => {
+     const newState = { id: crypto.randomUUID(), ... }
+     states.push(newState)
+   }
+
+   // ✅ Correct - Update existing record
+   const saveState = (surveyId) => {
+     const existingState = states.find(s => s.surveyId === surveyId)
+     if (existingState) {
+       Object.assign(existingState, { ...newState })
+     } else {
+       states.push({ id: crypto.randomUUID(), surveyId, ... })
+     }
+   }
+   ```
+
+3. Maintain a single source of truth for each survey response
+4. Use timestamps (createdAt, updatedAt) to track conversation progress
+5. Consider implementing autosave with debounce to prevent too frequent updates
+
+Root cause of duplicate answers: The saveAnswer function was creating a new record with a new UUID each time instead of updating the existing survey response. This violated the single source of truth principle and led to multiple parallel conversation states.
