@@ -150,10 +150,16 @@ onMounted(async () => {
 })
 
 const formatDate = (date) => {
-  return new Date(date).toLocaleDateString('en-US', {
-    month: 'short',
+  if (!date) return '-'
+  // Handle Firebase Timestamp by converting to JS Date
+  const jsDate = date?.toDate ? date.toDate() : new Date(date)
+  return jsDate.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
     day: 'numeric',
-    year: 'numeric'
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: 'Europe/Warsaw'
   })
 }
 
