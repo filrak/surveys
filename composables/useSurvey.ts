@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { useCurrentUser } from 'vuefire'
-import { useFirestoreDB } from './useFirestore'
+import { useSurveyService } from '../services/surveyService'
 
 interface Question {
   text: string
@@ -19,16 +19,16 @@ interface Survey {
 
 export const useSurvey = () => {
   const user = useCurrentUser()
-  const { getSurvey: getFirestoreSurvey, listSurveys: listFirestoreSurveys, setSurvey: setFirestoreSurvey, deleteSurvey: deleteFirestoreSurvey } = useFirestoreDB()
+  const surveyService = useSurveyService()
 
   const getSurvey = async (id: string): Promise<Survey | null> => {
     if (!user.value?.uid) return null
-    return getFirestoreSurvey(id, user.value.uid)
+    return surveyService.getSurvey(id, user.value.uid)
   }
 
   const listSurveys = async (): Promise<Survey[]> => {
     if (!user.value?.uid) return []
-    return listFirestoreSurveys(user.value.uid)
+    return surveyService.listSurveys(user.value.uid)
   }
 
   const setSurvey = async (survey: Omit<Survey, 'id' | 'createdAt' | 'userId'>, id?: string): Promise<Survey> => {
@@ -36,7 +36,7 @@ export const useSurvey = () => {
       throw new Error('User must be logged in to create or update surveys')
     }
     
-    return setFirestoreSurvey(survey, user.value.uid, id)
+    return surveyService.setSurvey(survey, user.value.uid, id)
   }
 
   const deleteSurvey = async (id: string): Promise<void> => {
@@ -44,7 +44,7 @@ export const useSurvey = () => {
       throw new Error('User must be logged in to delete surveys')
     }
 
-    return deleteFirestoreSurvey(id, user.value.uid)
+    return surveyService.deleteSurvey(id, user.value.uid)
   }
 
   return {

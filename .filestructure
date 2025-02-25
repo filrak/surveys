@@ -53,6 +53,25 @@
 - `composables/`
   - `useSurvey.ts` - Survey management functions (create, read, update, delete)
   - `useCollectionInit.ts` - Firestore collections initialization logic
+  - `useSurvey.ts` - Survey management composable using surveyService
+  - `useAnswer.ts` - Answer management composable (currently using localStorage)
+  - `types.ts` - Common TypeScript interfaces and types
+
+## Services
+- `services/`
+  - `surveyService.ts` - Service for managing surveys in Firestore
+    - getSurvey - Get a single survey by ID
+    - listSurveys - List all surveys for a user
+    - setSurvey - Create or update a survey
+    - deleteSurvey - Delete a survey
+  - `answerService.ts` - Service for managing survey answers (empty for now)
+  - `utils.ts` - Common utilities for Firestore operations
+    - Collection references
+    - Document operations
+    - Ownership checks
+    - Query builders
+    - Response helpers
+    - Document mappers
 
 ## Middleware
 - `middleware/`
@@ -64,6 +83,12 @@
     - `init-collections.ts` - API endpoint for initializing Firestore collections
   - `plugins/`
     - `firebase-admin.ts` - Firebase Admin SDK initialization
+
+## Security
+- `firestore.rules` - Firestore security rules for surveys, responses, and analytics
+  - Survey rules - Read by any auth user, write/update/delete by owner
+  - Response rules - Create by any auth user, read by response owner or survey owner
+  - Analytics rules - Read by any auth user, write by survey owner
 
 ## Assets
 - `public/`
