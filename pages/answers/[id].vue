@@ -38,17 +38,17 @@
               class="flex-1 h-10"
             />
             <Button 
-              :disabled="isLoading || !globalQuestion" 
+              :disabled="analyzing || !globalQuestion" 
               @click="handleGlobalQuestion"
               size="lg"
             >
-              <Loader2Icon v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
+              <Loader2Icon v-if="analyzing" class="mr-2 h-4 w-4 animate-spin" />
               Analyze
             </Button>
           </div>
-          <div v-if="globalAnswer" class="p-4 bg-muted rounded-lg">
+          <div v-if="analysisResult" class="p-4 bg-muted rounded-lg">
             <div class="font-medium mb-2">Analysis:</div>
-            <div class="text-sm whitespace-pre-wrap">{{ globalAnswer }}</div>
+            <div class="text-sm whitespace-pre-wrap">{{ analysisResult }}</div>
           </div>
         </div>
       </Card>
@@ -161,15 +161,14 @@ import { useSurvey } from '~/composables/useSurvey'
 const router = useRouter()
 const route = useRoute()
 const { getSurvey } = useSurvey()
-const { getAnswers } = useAnswer()
+const { getAnswers, askQuestionAboutAnswers, loading: analyzing } = useAnswer()
 
 const loading = ref(true)
 const survey = ref(null)
 const answers = ref([])
 const expandedAnswers = ref(new Set())
 const globalQuestion = ref('')
-const globalAnswer = ref('')
-const isLoading = ref(false)
+const analysisResult = ref('')
 const filterStatus = ref('all')
 
 const filterOptions = [
@@ -227,17 +226,14 @@ const formatDate = (timestamp) => {
 }
 
 const handleGlobalQuestion = async () => {
-  if (!globalQuestion.value || isLoading.value) return
-
-  isLoading.value = true
+  if (!globalQuestion.value) return
+  
   try {
-    const answer = await askQuestionAboutAnswers(route.params.id as string, globalQuestion.value)
-    globalAnswer.value = answer
+    const answer = await askQuestionAboutAnswers(globalQuestion.value, answers.value)
+    analysisResult.value = answer
     globalQuestion.value = '' // Clear input after successful question
   } catch (error) {
     console.error('Error asking question:', error)
-  } finally {
-    isLoading.value = false
   }
 }
 

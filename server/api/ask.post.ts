@@ -9,19 +9,24 @@ export default defineEventHandler(async (event) => {
 
     // Format all conversations into a structured context
     const context = answers.map((answer, index) => {
-      const conversation = answer.conversation.map(msg => `${msg.type}: ${msg.content}`).join('\n')
-      return `Survey Response #${index + 1}:\n${conversation}\n`
-    }).join('\n---\n')
+      if (!answer.messages) return `Survey Response #${index + 1}: No messages data`
+      
+      const conversation = answer.messages
+        .map(msg => `${msg.type}: ${msg.content}`)
+        .join('\n')
+      
+      return `Survey Response #${index + 1}:\n${conversation}`
+    }).join('\n\n---\n\n')
 
     const completion = await openai.chat.completions.create({
       messages: [
         {
           role: 'system',
-          content: 'You are a helpful assistant analyzing multiple survey responses. Provide clear, concise insights and patterns from the survey data.'
+          content: 'You are a helpful assistant analyzing multiple survey responses. Provide clear, concise insights and patterns from the survey data. Answer the question as well as you can.'
         },
         {
           role: 'user',
-          content: `Here are all the survey responses:\n\n${context}\n\nQuestion: ${question}\n\nProvide a comprehensive analysis focusing on patterns and insights across all responses.`
+          content: `For this question: ${question}\n\nProvide insighst and data analyzing all responses. Here are all the survey responses:\n\n${context}\n\n`
         }
       ],
       model: 'gpt-4o-mini',
