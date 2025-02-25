@@ -67,12 +67,19 @@ const saveSurvey = async (data: typeof surveyData.value) => {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   if (isEditing.value) {
     // Load existing survey if editing
-    const survey = getSurvey(route.query.id as string)
-    if (survey) {
-      surveyData.value = survey
+    isLoading.value = true
+    try {
+      const survey = await getSurvey(route.query.id as string)
+      if (survey) {
+        surveyData.value = survey
+      }
+    } catch (error) {
+      console.error('Error loading survey:', error)
+    } finally {
+      isLoading.value = false
     }
   } else {
     // Load template data from localStorage if creating new survey

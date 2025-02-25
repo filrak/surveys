@@ -92,7 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, watch } from 'vue'
 import { 
   ArrowLeft,
   Trash2 as Trash2Icon,
@@ -125,10 +125,18 @@ const emit = defineEmits<{
   (e: 'save', data: SurveyData): void
 }>()
 
-const surveyData = reactive<SurveyData>(props.initialData || {
+const surveyData = reactive<SurveyData>({
   name: '',
   questions: [createEmptyQuestion()]
 })
+
+// Watch for initialData changes and update surveyData
+watch(() => props.initialData, (newData) => {
+  if (newData) {
+    surveyData.name = newData.name
+    surveyData.questions = [...newData.questions]
+  }
+}, { immediate: true })
 
 // Initialize empty question
 function createEmptyQuestion(): Question {
