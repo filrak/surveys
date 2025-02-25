@@ -79,7 +79,7 @@
               </TableCell>
             </TableRow>
             <!-- Empty state -->
-            <TableRow v-if="!surveys.length">
+            <TableRow v-if="!surveysWithResponses.length">
               <TableCell colspan="6" class="h-24 text-center">
                 <div class="flex flex-col items-center justify-center space-y-2">
                   <ClipboardListIcon class="h-8 w-8 text-muted-foreground" />
@@ -131,22 +131,45 @@ const router = useRouter()
 const { listSurveys } = useSurvey()
 const { getAnswers } = useAnswer()
 const surveys = ref([])
+const currentUser = useCurrentUser()
 
-// Add response count to each survey
-const surveysWithResponses = computed(() => {
-  return surveys.value.map(survey => {
-    const answers = getAnswers(survey.id)
-    const completedAnswers = answers.filter(a => a.finished)
-    return {
-      ...survey,
-      responseCount: answers.length,
-      completedCount: completedAnswers.length
-    }
-  })
-})
+// Reactive surveys with response counts
+const surveysWithResponses = ref([])
 
-onMounted(async () => {
-  surveys.value = await listSurveys()
+// Load surveys and their responses
+const loadSurveysWithResponses = async () => {
+  if (!currentUser.value?.uid) return
+  
+  const surveyList = await listSurveys()
+  
+  // Load answers for each survey
+  const surveysWithCounts = await Promise.all(
+    surveyList.map(async (survey) => {
+      try {
+        const answers = await getAnswers(survey.id)
+        const completedAnswers = answers.filter(a => a.finished)
+        return {
+          ...survey,
+          responseCount: answers.length,
+          completedCount: completedAnswers.length
+        }
+      } catch (error) {
+        console.error(`Error loading responses for survey "${survey.name}":`, error)
+        return {
+          ...survey,
+          responseCount: 0,
+          completedCount: 0
+        }
+      }
+    })
+  )
+  
+  surveysWithResponses.value = surveysWithCounts
+}
+
+// Load surveys on mount
+onMounted(() => {
+  loadSurveysWithResponses()
 })
 
 const formatDate = (date) => {
@@ -165,6 +188,6 @@ const formatDate = (date) => {
 
 const deleteSurvey = async (id) => {
   // Add your delete logic here
-  surveys.value = surveys.value.filter(survey => survey.id !== id)
+  surveysWithResponses.value = surveysWithResponses.value.filter(survey => survey.id !== id)
 }
 </script>

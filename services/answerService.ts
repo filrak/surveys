@@ -1,23 +1,50 @@
 import { useFirestore } from 'vuefire'
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
-import type { Answer, Message } from '../composables/types'
-import { 
-  getCollections, 
-  getDocumentById, 
-  buildSurveyQuery, 
-  mapDocuments,
-  canAccessResponse,
-  verifyOwnership 
-} from './utils'
+import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc, query, where, serverTimestamp } from "firebase/firestore"
+import type { Answer } from '~/composables/types'
+import { getCollections, mapDocuments } from './utils'
 
 export const useAnswerService = () => {
   const db = useFirestore()
-  const { responses, analytics } = getCollections(db)
+  const { responses } = getCollections(db)
 
-  // Empty for now, we'll implement the methods when needed
-  // This follows YAGNI principle - we'll add functionality when it's required
+  const getAnswers = async (surveyId: string) => {
+    const q = query(responses, where('surveyId', '==', surveyId))
+    const snapshot = await getDocs(q)
+    return mapDocuments<Answer>(snapshot)
+  }
+
+  const saveAnswer = async (surveyId: string, userId: string, answer: Omit<Answer, 'id' | 'createdAt'>) => {
+    const answerData = {
+      ...answer,
+      surveyId,
+      userId,
+      createdAt: serverTimestamp()
+    }
+    
+    const docRef = await addDoc(responses, answerData)
+    return {
+      id: docRef.id,
+      ...answerData,
+      createdAt: new Date().toISOString()
+    }
+  }
+
+  const updateAnswer = async (answerId: string, userId: string, data: Partial<Answer>) => {
+    const docRef = doc(responses, answerId)
+    await updateDoc(docRef, {
+      ...data,
+      updatedAt: serverTimestamp()
+    })
+  }
+
+  const deleteAnswer = async (answerId: string) => {
+    await deleteDoc(doc(responses, answerId))
+  }
 
   return {
-    // Methods will be added here
+    getAnswers,
+    saveAnswer,
+    updateAnswer,
+    deleteAnswer
   }
 }
