@@ -5,7 +5,7 @@
             <!-- Header -->
             <div class="flex items-center justify-between mb-6">
         <h1 class="text-3xl font-bold tracking-tight">Your Surveys</h1>
-        <Button @click="router.push('/create')" class="inline-flex items-center">
+        <Button @click="router.push('/create/template')" class="inline-flex items-center">
           <PlusIcon class="mr-2 h-4 w-4" />
           Create Survey
         </Button>
@@ -52,7 +52,7 @@
                   <Button
                     variant="outline"
                     size="sm"
-                    @click="router.push(`/create?id=${survey.id}`)"
+                    @click="router.push(`/create/questions?id=${survey.id}`)"
                   >
                     <PencilIcon class="mr-2 h-4 w-4" />
                     Edit
