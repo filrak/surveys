@@ -131,19 +131,16 @@ const router = useRouter()
 const { listSurveys } = useSurvey()
 const { getAnswers } = useAnswer()
 const surveys = ref([])
+const surveysWithResponses = ref([])
 const currentUser = useCurrentUser()
 
-// Reactive surveys with response counts
-const surveysWithResponses = ref([])
-
-// Load surveys and their responses
-const loadSurveysWithResponses = async () => {
-  if (!currentUser.value?.uid) return
-  
+// Load surveys and update response counts
+const loadSurveysAndCounts = async () => {
   const surveyList = await listSurveys()
-  
-  // Load answers for each survey
-  const surveysWithCounts = await Promise.all(
+  surveys.value = surveyList
+
+  // Get response counts for each survey
+  const withCounts = await Promise.all(
     surveyList.map(async (survey) => {
       try {
         const answers = await getAnswers(survey.id)
@@ -163,20 +160,22 @@ const loadSurveysWithResponses = async () => {
       }
     })
   )
-  
-  surveysWithResponses.value = surveysWithCounts
+
+  surveysWithResponses.value = withCounts
 }
 
-// Load surveys on mount
+// Load data on mount
 onMounted(() => {
-  loadSurveysWithResponses()
+  loadSurveysAndCounts()
 })
 
-const formatDate = (date) => {
-  if (!date) return '-'
-  // Handle Firebase Timestamp by converting to JS Date
-  const jsDate = date?.toDate ? date.toDate() : new Date(date)
-  return jsDate.toLocaleDateString('en-US', {
+const formatDate = (timestamp) => {
+  if (!timestamp) return ''
+  
+  // Handle Firestore Timestamp
+  const date = timestamp?.toDate ? timestamp.toDate() : new Date(timestamp)
+  
+  return date.toLocaleString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',

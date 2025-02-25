@@ -158,12 +158,12 @@ import StatBox from '~/components/ui/stat-box/StatBox.vue'
 import { useAnswer } from '~/composables/useAnswer'
 import { useSurvey } from '~/composables/useSurvey'
 
-const route = useRoute()
 const router = useRouter()
-const user = useCurrentUser()
-const { getAnswers, askQuestionAboutAnswers } = useAnswer()
+const route = useRoute()
 const { getSurvey } = useSurvey()
+const { getAnswers } = useAnswer()
 
+const loading = ref(true)
 const survey = ref(null)
 const answers = ref([])
 const expandedAnswers = ref(new Set())
@@ -210,11 +210,20 @@ const toggleConversation = (answerId) => {
   }
 }
 
-const formatDate = (date) => {
-  return new Intl.RelativeTimeFormat('en', { numeric: 'auto' }).format(
-    Math.round((new Date(date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)),
-    'day'
-  )
+const formatDate = (timestamp) => {
+  if (!timestamp) return ''
+  
+  // Handle Firestore Timestamp
+  const date = timestamp?.toDate ? timestamp.toDate() : new Date(timestamp)
+  
+  return date.toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: 'Europe/Warsaw'
+  })
 }
 
 const handleGlobalQuestion = async () => {
@@ -232,17 +241,32 @@ const handleGlobalQuestion = async () => {
   }
 }
 
-onMounted(() => {
-  const surveyId = route.params.id as string
-  const surveyData = getSurvey(surveyId)
-  
-  // Redirect if survey doesn't exist or doesn't belong to user
-  if (!surveyData) {
-    router.push('/list')
-    return
+const loadSurveyAndAnswers = async () => {
+  try {
+    const surveyId = route.params.id as string
+    
+    // Load survey details and answers in parallel
+    const [surveyData, answersData] = await Promise.all([
+      getSurvey(surveyId),
+      getAnswers(surveyId)
+    ])
+
+    if (!surveyData) {
+      router.push('/404')
+      return
+    }
+
+    survey.value = surveyData
+    answers.value = answersData
+  } catch (error) {
+    console.error('Error loading survey and answers:', error)
+  } finally {
+    loading.value = false
   }
-  
-  survey.value = surveyData
-  answers.value = getAnswers(surveyId)
+}
+
+// Load data on mount
+onMounted(() => {
+  loadSurveyAndAnswers()
 })
 </script>
