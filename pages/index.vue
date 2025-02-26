@@ -3,6 +3,7 @@
     <SectionHero />
     <SectionStats />
     <SectionFeatures />
+    <SectionForWho />
     <SectionTestimonials />
     <SectionPricing />
   </main>
