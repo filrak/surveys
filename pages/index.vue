@@ -8,3 +8,4 @@
     <SectionPricing />
   </main>
 </template>
+

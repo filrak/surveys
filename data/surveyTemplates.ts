@@ -2,6 +2,7 @@ export interface SurveyTemplate {
   id: string
   title: string
   description: string
+  category: string
   features: string[]
   questions: {
     text: string
@@ -15,6 +16,7 @@ export const surveyTemplates: SurveyTemplate[] = [
     id: 'product-feedback',
     title: 'Product Feedback',
     description: 'Gather actionable insights about your product from users',
+    category: 'Product',
     features: [
       'Core value assessment',
       'Pain points identification',
@@ -48,6 +50,7 @@ export const surveyTemplates: SurveyTemplate[] = [
     id: 'event-feedback',
     title: 'Event Feedback',
     description: 'Collect detailed insights about event experience and impact',
+    category: 'Marketing',
     features: [
       'Content relevance assessment',
       'Engagement measurement',
@@ -81,6 +84,8 @@ export const surveyTemplates: SurveyTemplate[] = [
     id: '360-review',
     title: '360° Performance Review',
     description: 'Comprehensive peer feedback for professional development',
+    category: 'HR',
+
     features: [
       'Core competencies evaluation',
       'Behavioral examples',

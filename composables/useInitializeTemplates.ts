@@ -20,9 +20,8 @@ export const useInitializeTemplates = () => {
           name: template.title,
           description: template.description,
           features: template.features,
-          icon: 'users', // Default icon
-          color: 'purple', // Default color
-          type: template.id,
+          id: template.id,
+          category: template.category,
           questions: template.questions,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
