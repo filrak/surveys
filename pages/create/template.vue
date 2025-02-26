@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import type { SurveyTemplate } from '~/data/surveyTemplates'
+import type { Template } from '~/services/templateService'
 
 // Import components
 import TemplateSelection from '~/components/create/TemplateSelection.vue'
@@ -30,11 +30,12 @@ import { Card, CardContent } from '~/components/ui/card'
 const router = useRouter()
 
 // Template selection handler
-const handleTemplateSelection = (template: SurveyTemplate) => {
+const handleTemplateSelection = (template: Template) => {
   // Store template data in localStorage to pass it to the questions page
   localStorage.setItem('survey_template', JSON.stringify({
-    name: template.title,
-    questions: template.questions
+    name: template.name,
+    type: template.type,
+    questions: template.questions || [] // Use template questions if available
   }))
   router.push('/create/questions')
 }

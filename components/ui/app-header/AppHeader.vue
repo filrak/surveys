@@ -1,31 +1,63 @@
 <!-- App header component -->
 <template>
   <header class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-    <div class="container flex h-14 items-center">
-      <div class="mr-4 flex">
-        <NuxtLink to="/" class="mr-6 flex items-center space-x-2">
+    <nav class="container flex h-14 items-center justify-between">
+      <!-- Logo and Navigation -->
+      <div class="flex items-center space-x-6">
+        <NuxtLink class="flex items-center space-x-2" to="/">
           <ClipboardIcon class="h-6 w-6" />
           <span class="hidden font-bold sm:inline-block">AI Surveys</span>
         </NuxtLink>
-        <nav class="flex items-center space-x-2">
+        
+        <!-- Main Navigation -->
+        <div class="hidden md:flex items-center space-x-4">
           <NuxtLink
             to="/"
             class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background hover:bg-accent hover:text-accent-foreground h-10 py-2 px-4"
           >
             Home
           </NuxtLink>
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Use Cases</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <div class="grid gap-3 p-4 w-[400px] md:w-[500px] lg:w-[600px]">
+                    <NavigationMenuLink class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                      <div class="text-sm font-medium leading-none">Marketing Team</div>
+                      <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                        Maximize campaign impact and optimize messaging strategies
+                      </p>
+                    </NavigationMenuLink>
+                    <NavigationMenuLink class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                      <div class="text-sm font-medium leading-none">HR Team</div>
+                      <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                        Create a thriving workplace and boost team engagement
+                      </p>
+                    </NavigationMenuLink>
+                    <NavigationMenuLink class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                      <div class="text-sm font-medium leading-none">Product Team</div>
+                      <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                        Build what users truly need and validate feature ideas
+                      </p>
+                    </NavigationMenuLink>
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
           <NuxtLink
             to="/pricing"
             class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background hover:bg-accent hover:text-accent-foreground h-10 py-2 px-4"
           >
             Pricing
           </NuxtLink>
-        </nav>
+        </div>
       </div>
 
-      <div class="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+      <!-- Right side actions -->
+      <div class="flex items-center space-x-4">
         <div class="flex items-center gap-2">
-
           <!-- Auth Button -->
           <template v-if="user">
             <DropdownMenu>
@@ -68,12 +100,10 @@
             </Button>
           </template>
           <ThemeSwitcher />
-
-          <!-- Page Actions -->
           <slot name="actions" />
         </div>
       </div>
-    </div>
+    </nav>
   </header>
 </template>
 
@@ -97,6 +127,12 @@ import DropdownMenuTrigger from '~/components/ui/dropdown-menu/DropdownMenuTrigg
 import DropdownMenuContent from '~/components/ui/dropdown-menu/DropdownMenuContent.vue'
 import DropdownMenuItem from '~/components/ui/dropdown-menu/DropdownMenuItem.vue'
 import DropdownMenuSeparator from '~/components/ui/dropdown-menu/DropdownMenuSeparator.vue'
+import NavigationMenu from '~/components/ui/navigation-menu/NavigationMenu.vue'
+import NavigationMenuContent from '~/components/ui/navigation-menu/NavigationMenuContent.vue'
+import NavigationMenuItem from '~/components/ui/navigation-menu/NavigationMenuItem.vue'
+import NavigationMenuLink from '~/components/ui/navigation-menu/NavigationMenuLink.vue'
+import NavigationMenuList from '~/components/ui/navigation-menu/NavigationMenuList.vue'
+import NavigationMenuTrigger from '~/components/ui/navigation-menu/NavigationMenuTrigger.vue'
 
 defineProps<{
   showNav?: boolean

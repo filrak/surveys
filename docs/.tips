@@ -1,0 +1,20 @@
+# Tips for Working with the Codebase
+
+## Firebase Data Structure
+1. Always check the actual data structure in Firebase before implementing queries
+2. Don't assume fields exist - make them optional in interfaces if they're not guaranteed
+3. Keep queries simple - start with getting all data before adding filters
+4. Use console.log to track data flow through the application
+
+## Code Organization
+1. Keep business logic in services
+2. Use composables for shared functionality
+3. Handle loading and error states in components
+4. Follow existing naming conventions
+
+## Best Practices
+1. Add proper TypeScript interfaces that match the actual data
+2. Include loading states for better UX
+3. Add error handling at all levels
+4. Use console.log strategically for debugging
+5. Test with real data before implementing complex filters

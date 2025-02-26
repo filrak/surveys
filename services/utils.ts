@@ -6,7 +6,8 @@ import type { Firestore as FirestoreType } from 'firebase/firestore'
 export const getCollections = (db: FirestoreType) => ({
   surveys: collection(db, 'surveys'),
   responses: collection(db, 'survey_responses'),
-  analytics: collection(db, 'response_analytics')
+  analytics: collection(db, 'response_analytics'),
+  templates: collection(db, 'templates')
 })
 
 // Common document operations

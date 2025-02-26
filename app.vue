@@ -30,4 +30,5 @@ import Button from '~/components/ui/button/Button.vue'
 
 const route = useRoute()
 const router = useRouter()
+
 </script>

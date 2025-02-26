@@ -43,8 +43,21 @@ const { setSurvey, getSurvey } = useSurvey()
 const isEditing = computed(() => Boolean(route.query.id))
 
 // Data for the survey
-const surveyData = ref({
+interface Question {
+  text: string
+  expectedAnswer: string
+  unwantedAnswer: string
+}
+
+interface Survey {
+  name: string
+  type: string
+  questions: Question[]
+}
+
+const surveyData = ref<Survey>({
   name: '',
+  type: '',
   questions: [{
     text: '',
     expectedAnswer: '',
@@ -53,7 +66,7 @@ const surveyData = ref({
 })
 
 // Save survey
-const saveSurvey = async (data: typeof surveyData.value) => {
+const saveSurvey = async (data: Survey) => {
   if (!currentUser.value) return
   
   isLoading.value = true
@@ -82,11 +95,19 @@ onMounted(async () => {
       isLoading.value = false
     }
   } else {
-    // Load template data from localStorage if creating new survey
+    // Load template data from localStorage
     const templateData = localStorage.getItem('survey_template')
     if (templateData) {
-      surveyData.value = JSON.parse(templateData)
-      localStorage.removeItem('survey_template') // Clean up after loading
+      const template = JSON.parse(templateData)
+      surveyData.value = {
+        name: template.name,
+        type: template.type,
+        questions: template.questions.map((q: any) => ({
+          text: q.text || '',
+          expectedAnswer: q.expectedAnswer || '',
+          unwantedAnswer: q.unwantedAnswer || ''
+        }))
+      }
     }
   }
 })
