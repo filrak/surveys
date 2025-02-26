@@ -23,24 +23,24 @@
                 <NavigationMenuTrigger>Use Cases</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <div class="grid gap-3 p-4 w-[400px] md:w-[500px] lg:w-[600px]">
-                    <NavigationMenuLink class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                    <NuxtLink to="/use-case/product" class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                      <div class="text-sm font-medium leading-none">Product Team</div>
+                      <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                        Get actionable insights about your product from users
+                      </p>
+                    </NuxtLink>
+                    <NuxtLink to="/use-case/marketing" class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                       <div class="text-sm font-medium leading-none">Marketing Team</div>
                       <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
                         Maximize campaign impact and optimize messaging strategies
                       </p>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                    </NuxtLink>
+                    <NuxtLink to="/use-case/hr" class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                       <div class="text-sm font-medium leading-none">HR Team</div>
                       <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
                         Create a thriving workplace and boost team engagement
                       </p>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                      <div class="text-sm font-medium leading-none">Product Team</div>
-                      <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                        Build what users truly need and validate feature ideas
-                      </p>
-                    </NavigationMenuLink>
+                    </NuxtLink>
                   </div>
                 </NavigationMenuContent>
               </NavigationMenuItem>

@@ -74,7 +74,7 @@ bun run preview
 
 # TO-DO
 
-- Replace local storage with firebase
+- associate survey types with colors, add customization of the types
 - Finish landing
 - Create pricing plans in Stripe
 - Add token limits for accounts (hidden)
