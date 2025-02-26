@@ -27,9 +27,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { XIcon } from 'lucide-vue-next'
 import AppHeader from '~/components/ui/app-header/AppHeader.vue'
 import Button from '~/components/ui/button/Button.vue'
-import { useAnswerService } from '~/services/answerService'
 
-await useAnswerService()
 const route = useRoute()
 const router = useRouter()
 </script>

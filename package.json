@@ -24,6 +24,7 @@
     "nuxt-vuefire": "1.0.5",
     "openai": "^4.85.1",
     "radix-vue": "^1.9.14",
+    "reka-ui": "^2.0.0",
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7",
     "vue": "latest",
