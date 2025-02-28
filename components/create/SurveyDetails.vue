@@ -10,6 +10,17 @@
         :disabled="isLoading"
       />
     </div>
+
+    <!-- Survey Category -->
+    <div class="space-y-2">
+      <Label for="surveyCategory">Category</Label>
+      <Input
+        id="surveyCategory"
+        v-model="surveyData.category"
+        placeholder="Enter survey category"
+        :disabled="isLoading"
+      />
+    </div>
     
     <!-- Questions List -->
     <div class="space-y-6">
@@ -112,6 +123,7 @@ interface Question {
 
 interface SurveyData {
   name: string
+  category: string
   questions: Question[]
 }
 
@@ -127,6 +139,7 @@ const emit = defineEmits<{
 
 const surveyData = reactive<SurveyData>({
   name: '',
+  category: '',
   questions: [createEmptyQuestion()]
 })
 
@@ -134,6 +147,7 @@ const surveyData = reactive<SurveyData>({
 watch(() => props.initialData, (newData) => {
   if (newData) {
     surveyData.name = newData.name
+    surveyData.category = newData.category
     surveyData.questions = [...newData.questions]
   }
 }, { immediate: true })

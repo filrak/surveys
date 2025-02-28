@@ -16,6 +16,7 @@
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
+              <TableHead>Category</TableHead>
               <TableHead>Questions</TableHead>
               <TableHead>Responses</TableHead>
               <TableHead>Created</TableHead>
@@ -26,6 +27,7 @@
           <TableBody>
             <TableRow v-for="survey in surveysWithResponses" :key="survey.id">
               <TableCell class="font-medium">{{ survey.name }}</TableCell>
+              <TableCell>{{ survey.category || '-' }}</TableCell>
               <TableCell>
                 {{ survey.questions.length }} {{ survey.questions.length === 1 ? 'question' : 'questions' }}
               </TableCell>
@@ -80,7 +82,7 @@
             </TableRow>
             <!-- Empty state -->
             <TableRow v-if="!surveysWithResponses.length">
-              <TableCell colspan="6" class="h-24 text-center">
+              <TableCell colspan="7" class="h-24 text-center">
                 <div class="flex flex-col items-center justify-center space-y-2">
                   <ClipboardListIcon class="h-8 w-8 text-muted-foreground" />
                   <div class="text-lg font-medium">No surveys</div>

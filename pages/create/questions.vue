@@ -51,12 +51,14 @@ interface Question {
 
 interface Survey {
   name: string
+  category: string
   type: string
   questions: Question[]
 }
 
 const surveyData = ref<Survey>({
   name: '',
+  category: '',
   type: '',
   questions: [{
     text: '',
@@ -101,6 +103,7 @@ onMounted(async () => {
       const template = JSON.parse(templateData)
       surveyData.value = {
         name: template.name,
+        category: template.category,
         type: template.type,
         questions: template.questions.map((q: any) => ({
           text: q.text || '',
