@@ -35,6 +35,7 @@ const handleTemplateSelection = (template: Template) => {
   localStorage.setItem('survey_template', JSON.stringify({
     name: template.name,
     type: template.type,
+    category: template.category,
     questions: template.questions || [] // Use template questions if available
   }))
   router.push('/create/questions')

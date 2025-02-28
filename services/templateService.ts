@@ -7,8 +7,7 @@ export interface Template {
   name: string
   description: string
   features: string[]
-  icon: string
-  color: string
+  category: string
   type: string
   questions?: Array<{
     text: string
