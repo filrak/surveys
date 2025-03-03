@@ -20,6 +20,7 @@ export interface Template {
   createdBy?: string
 }
 
+
 export const useTemplateService = () => {
   const db = useFirestore()
   const templatesCollection = collection(db, 'templates')
