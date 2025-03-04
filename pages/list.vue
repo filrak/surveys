@@ -2,9 +2,15 @@
 <template>
   <div class="min-h-screen bg-background">
     <div class="container mx-auto py-8">
-            <!-- Header -->
-            <div class="flex items-center justify-between mb-6">
-        <h1 class="text-3xl font-bold tracking-tight">Your Surveys</h1>
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex flex-col gap-4">
+          <h1 class="text-3xl font-bold tracking-tight">Your Surveys</h1>
+          <CategoryFilter
+            :surveys="surveysWithResponses"
+            @update:selected="selectedCategories = $event"
+          />
+        </div>
         <Button @click="router.push('/create/template')" class="inline-flex items-center">
           <PlusIcon class="mr-2 h-4 w-4" />
           Create Survey
@@ -25,7 +31,7 @@
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow v-for="survey in surveysWithResponses" :key="survey.id">
+            <TableRow v-for="survey in filteredSurveys" :key="survey.id">
               <TableCell class="font-medium">{{ survey.name }}</TableCell>
               <TableCell>{{ survey.category || '-' }}</TableCell>
               <TableCell>
@@ -81,7 +87,7 @@
               </TableCell>
             </TableRow>
             <!-- Empty state -->
-            <TableRow v-if="!surveysWithResponses.length">
+            <TableRow v-if="!filteredSurveys.length">
               <TableCell colspan="7" class="h-24 text-center">
                 <div class="flex flex-col items-center justify-center space-y-2">
                   <ClipboardListIcon class="h-8 w-8 text-muted-foreground" />
@@ -128,13 +134,25 @@ import DropdownMenuItem from '~/components/ui/dropdown-menu/DropdownMenuItem.vue
 import DropdownMenuSeparator from '~/components/ui/dropdown-menu/DropdownMenuSeparator.vue'
 import Button from '~/components/ui/button/Button.vue'
 import Badge from '~/components/ui/badge/Badge.vue'
+import CategoryFilter from '~/components/CategoryFilter.vue'
 
 const router = useRouter()
 const { listSurveys } = useSurvey()
 const { getAnswers } = useAnswer()
 const surveys = ref([])
 const surveysWithResponses = ref([])
+const selectedCategories = ref([])
 const currentUser = useCurrentUser()
+
+// Computed property for filtered surveys
+const filteredSurveys = computed(() => {
+  if (!selectedCategories.value.length) return surveysWithResponses.value
+  
+  return surveysWithResponses.value.filter(survey => {
+    const surveyCategory = survey.category || 'No category'
+    return selectedCategories.value.includes(surveyCategory)
+  })
+})
 
 // Load surveys and update response counts
 const loadSurveysAndCounts = async () => {
