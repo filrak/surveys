@@ -1,16 +1,20 @@
 ## what the application is about
-
+Name of the app is feedback intelligence.
 This is an application for conducting surveys with AI chat.
-
-The functionality of the application is divided into three parts:
-1. The part where a survey is conducted, it's a simple chat window that is supposed to collect and save answers tot he survey
-2. A survey creation page where we set up the questions and describe what kind of answers we expect.
-3. A dashboard where we can see all our surveys and their results.
-
 
 ## Value proposition
 
 The main value proposition fo the tool is that it's providinga  way to get exactly the insights you need from the customer feedback. Usuallyt he quality fo answers is bad. with ai chat you can tell exactlyw hat kind of information you wanna extract from suers and it'll make sure you get it. Another value proposition are insights intot his data -  analyzing it with ai. You can ask questions about the data and get answers without having to look at the data itself.
+
+## Structure
+
+
+
+The functionality of the application is divided into four parts:
+1. The part where a survey is conducted, it's a simple chat window that is supposed to collect and save answers tot he survey
+2. A survey creation page where we set up the questions and describe what kind of answers we expect.
+3. A dashboard where we can see all our surveys.
+4. An answers paeg where we have a list of answers to certain survey and analytics.
 
 ## Tech stack
 

@@ -71,11 +71,11 @@ onMounted(() => {
 })
 
 const testimonial = {
-  quote: 'This platform has transformed how we handle our business operations. The statistics speak for themselves - it\'s been an incredible journey.',
-  author: 'Sarah Johnson',
-  role: 'CEO at TechCorp',
-  avatar: 'https://shadcnblocks-vue.com/avatars/sarah-johnson.jpg',
-  initials: 'SJ'
+  quote: "The AI chat helps us gather detailed employee feedback that actually drives meaningful workplace improvements. It's like having a skilled interviewer for every survey.",
+  author: 'Emily Rodriguez',
+  role: 'HR Director',
+  avatar: 'https://shadcnblocks-vue.com/avatars/1.jpg',
+  initials: 'ER'
 }
 </script>
 
@@ -92,7 +92,7 @@ const testimonial = {
           Join the 2,000 companies using Feedback Intelligence
         </h2>
         <p class="text-muted-foreground md:text-lg max-w-2xl mx-auto">
-            Start getting better answers with our intelligent feedback platform.
+          Get precise insights from your feedback with AI-powered conversations and analysis.
         </p>
       </div>
 

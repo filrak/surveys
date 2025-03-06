@@ -7,27 +7,27 @@ import { Quote, Star, Briefcase } from 'lucide-vue-next'
 const testimonials = [
   {
     id: 1,
-    name: 'Alex Thompson',
-    initials: 'AT',
-    role: 'CTO at TechCorp',
+    name: 'Emily Rodriguez',
+    initials: 'ER',
+    role: 'HR Director',
     avatar: 'https://shadcnblocks-vue.com/avatars/1.jpg',
-    quote: 'The components are incredibly well-designed and have saved us countless hours of development time. Highly recommended!'
+    quote: 'The AI chat helps us gather detailed employee feedback that actually drives meaningful workplace improvements. It\'s like having a skilled interviewer for every survey.'
   },
   {
     id: 2,
-    name: 'Sarah Chen',
-    initials: 'SC',
+    name: 'David Park',
+    initials: 'DP',
     role: 'Product Manager',
     avatar: 'https://shadcnblocks-vue.com/avatars/2.jpg',
-    quote: 'Outstanding quality and attention to detail. The modern design elements have really elevated our user interface.'
+    quote: 'We\'ve cut our feedback analysis time by 80%. The AI instantly surfaces patterns and insights that would take weeks to find manually.'
   },
   {
     id: 3,
-    name: 'James Wilson',
-    initials: 'JW',
-    role: 'Lead Developer',
+    name: 'Sarah Thompson',
+    initials: 'ST',
+    role: 'Marketing Lead',
     avatar: 'https://shadcnblocks-vue.com/avatars/3.jpg',
-    quote: 'The flexibility and customization options are fantastic. Perfect for both small projects and enterprise applications.'
+    quote: 'Game-changer for our marketing campaigns. We get precise customer sentiment and preferences that directly inform our messaging strategy.'
   }
 ]
 </script>
@@ -41,11 +41,14 @@ const testimonials = [
         <div class="mb-16 flex items-center justify-center gap-2 flex-col">
           <Badge variant="outline" class="mb-4">
             <Quote class="mr-2 size-4" />
-            Client Stories
+            Success Stories
           </Badge>
           <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center">
-            What People Are Saying
+            Transforming Feedback into Action
           </h2>
+          <p class="mt-4 text-muted-foreground text-center max-w-[600px]">
+            See how teams use Feedback Intelligence to get precise insights and make data-driven decisions
+          </p>
         </div>
 
         <!-- Grid Layout -->
