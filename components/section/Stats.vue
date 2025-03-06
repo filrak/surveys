@@ -89,10 +89,10 @@ const testimonial = {
           Our Impact
         </Badge>
         <h2 class="text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl">
-          Join the 2,000 companies using AI Surveys
+          Join the 2,000 companies using Feedback Intelligence
         </h2>
         <p class="text-muted-foreground md:text-lg max-w-2xl mx-auto">
-            Start getting better answers with our AI-powered surveys.
+            Start getting better answers with our intelligent feedback platform.
         </p>
       </div>
 

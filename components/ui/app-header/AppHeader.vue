@@ -6,7 +6,7 @@
       <div class="flex items-center space-x-6">
         <NuxtLink class="flex items-center space-x-2" to="/">
           <ClipboardIcon class="h-6 w-6" />
-          <span class="hidden font-bold sm:inline-block">AI Surveys</span>
+          <span class="hidden font-bold sm:inline-block">Feedback Intelligence</span>
         </NuxtLink>
         
         <!-- Main Navigation -->

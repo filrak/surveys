@@ -4,7 +4,7 @@
     <template #hero>
       <div class="max-w-3xl mx-auto text-center space-y-6">
         <h1 class="text-4xl md:text-6xl font-bold">
-          Transform Employee Feedback with AI-Powered Conversations
+          Transform Employee Feedback with Intelligent Conversations
         </h1>
         <p class="text-xl text-muted-foreground">
           Get honest, actionable insights from your team through engaging, confidential dialogues

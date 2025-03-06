@@ -6,7 +6,7 @@
       <div class="space-y-4  ml-24 mr-24">
         <h3 class="text-2xl font-semibold text-foreground">Get the answers you want</h3>
         <p class="text-muted-foreground">
-          Transform your surveys into engaging conversations. Our AI-powered chat interface makes respondents feel heard and understood, leading to more honest, detailed responses and higher completion rates. Perfect for qualitative research, customer feedback, and employee engagement surveys.
+          Transform your surveys into engaging conversations. Our intelligent chat interface makes respondents feel heard and understood, leading to more honest, detailed responses and higher completion rates. Perfect for qualitative research, customer feedback, and employee engagement surveys.
         </p>
       </div>
       <div class="relative p-4">

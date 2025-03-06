@@ -4,7 +4,7 @@
     <template #hero>
       <div class="max-w-3xl mx-auto text-center space-y-6">
         <h1 class="text-4xl md:text-6xl font-bold">
-          Transform Marketing Research with AI-Powered Insights
+          Transform Marketing Research with Intelligent Insights
         </h1>
         <p class="text-xl text-muted-foreground">
           Get deeper insights into your campaigns and audience with conversational surveys that adapt in real-time
