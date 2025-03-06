@@ -3,7 +3,7 @@
 
     <!-- Feature 1 -->
     <section class="grid md:grid-cols-2 gap-8 items-center mb-16">
-      <div class="space-y-4">
+      <div class="space-y-4  ml-24 mr-24">
         <h3 class="text-2xl font-semibold text-foreground">Get the answers you want</h3>
         <p class="text-muted-foreground">
           Transform your surveys into engaging conversations. Our AI-powered chat interface makes respondents feel heard and understood, leading to more honest, detailed responses and higher completion rates. Perfect for qualitative research, customer feedback, and employee engagement surveys.
@@ -100,7 +100,7 @@
           </Card>
         </div>
       </div>
-      <div class="space-y-4">
+      <div class="space-y-4  ml-24 mr-24">
         <h3 class="text-2xl font-semibold text-foreground">Analyze the data and get insights</h3>
         <p class="text-muted-foreground">
           Design dynamic surveys in minutes, not hours. Our intuitive interface lets you craft intelligent conversation flows, set response expectations, and create branching logic with ease. No coding required - just your expertise and our AI's capabilities working together.
@@ -110,7 +110,7 @@
 
     <!-- Feature 3 -->
     <section class="grid md:grid-cols-2 gap-8 items-center mb-16">
-      <div class="space-y-4">
+      <div class="space-y-4  ml-24 mr-24">
         <h3 class="text-2xl font-semibold text-foreground">Start instantly with ready-to-use templates</h3>
         <p class="text-muted-foreground">
           Hit the ground running with our collection of professionally designed survey templates. From customer feedback and market research to employee satisfaction and event feedback - we've got you covered. Each template is fully customizable and optimized for conversational AI interactions, saving you time while ensuring best practices.
@@ -118,40 +118,42 @@
       </div>
       <div class="relative p-4">
         <!-- Template gallery miniature -->
-        <div class="grid grid-cols-2 gap-4 max-w-[500px] mx-auto">
-          <Card class="cursor-pointer hover:border-primary transition-colors">
-            <CardHeader class="p-4">
-              <Badge variant="outline" class="mb-2">Popular</Badge>
-              <CardTitle class="text-sm">Customer Feedback</CardTitle>
+        <div class="grid grid-cols-2 gap-6 max-w-[500px] mx-auto">
+          <Card class="cursor-pointer hover:border-primary transition-colors group">
+            <CardHeader class="p-4 space-y-3">
+              <div class="flex items-center justify-between">
+                <Badge variant="secondary" class="text-xs font-medium">Popular</Badge>
+              </div>
+              <CardTitle class="text-base">Customer Feedback</CardTitle>
+              <p class="text-sm text-muted-foreground">10 questions</p>
             </CardHeader>
-            <CardContent class="p-4 pt-0">
-              <p class="text-xs text-muted-foreground">10 questions</p>
-            </CardContent>
           </Card>
-          <Card class="cursor-pointer hover:border-primary transition-colors">
-            <CardHeader class="p-4">
-              <CardTitle class="text-sm">Employee Survey</CardTitle>
+          <Card class="cursor-pointer hover:border-primary transition-colors group">
+            <CardHeader class="p-4 space-y-3">
+              <div class="flex items-center justify-between h-6">
+                <!-- Empty div to maintain consistent spacing -->
+              </div>
+              <CardTitle class="text-base">Employee Survey</CardTitle>
+              <p class="text-sm text-muted-foreground">15 questions</p>
             </CardHeader>
-            <CardContent class="p-4 pt-0">
-              <p class="text-xs text-muted-foreground">15 questions</p>
-            </CardContent>
           </Card>
-          <Card class="cursor-pointer hover:border-primary transition-colors">
-            <CardHeader class="p-4">
-              <CardTitle class="text-sm">Market Research</CardTitle>
+          <Card class="cursor-pointer hover:border-primary transition-colors group">
+            <CardHeader class="p-4 space-y-3">
+              <div class="flex items-center justify-between h-6">
+                <!-- Empty div to maintain consistent spacing -->
+              </div>
+              <CardTitle class="text-base">Market Research</CardTitle>
+              <p class="text-sm text-muted-foreground">12 questions</p>
             </CardHeader>
-            <CardContent class="p-4 pt-0">
-              <p class="text-xs text-muted-foreground">12 questions</p>
-            </CardContent>
           </Card>
-          <Card class="cursor-pointer hover:border-primary transition-colors">
-            <CardHeader class="p-4">
-              <Badge variant="outline" class="mb-2">New</Badge>
-              <CardTitle class="text-sm">Event Feedback</CardTitle>
+          <Card class="cursor-pointer hover:border-primary transition-colors group">
+            <CardHeader class="p-4 space-y-3">
+              <div class="flex items-center justify-between">
+                <Badge variant="secondary" class="text-xs font-medium">New</Badge>
+              </div>
+              <CardTitle class="text-base">Event Feedback</CardTitle>
+              <p class="text-sm text-muted-foreground">8 questions</p>
             </CardHeader>
-            <CardContent class="p-4 pt-0">
-              <p class="text-xs text-muted-foreground">8 questions</p>
-            </CardContent>
           </Card>
         </div>
       </div>
