@@ -1,33 +1,32 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { FacebookIcon, TwitterIcon, InstagramIcon, LinkedinIcon } from 'lucide-vue-next'
+import { LinkedinIcon, TwitterIcon } from 'lucide-vue-next'
 
 const footerLinks = {
   product: [
     { name: 'Features', href: '#' },
-    { name: 'Pricing', href: '#' },
+    { name: 'Use Cases', href: '#' },
+    { name: 'Templates', href: '#' },
+    { name: 'Analytics', href: '#' }
+  ],
+  solutions: [
+    { name: 'Product Teams', href: '/use-case/product' },
+    { name: 'HR Teams', href: '/use-case/hr' },
+    { name: 'Marketing Teams', href: '/use-case/marketing' },
+    { name: 'Enterprise', href: '#' }
+  ],
+  resources: [
     { name: 'Documentation', href: '#' },
-    { name: 'Guides', href: '#' }
-  ],
-  company: [
-    { name: 'About', href: '#' },
+    { name: 'Help Center', href: '#' },
     { name: 'Blog', href: '#' },
-    { name: 'Careers', href: '#' },
     { name: 'Contact', href: '#' }
-  ],
-  legal: [
-    { name: 'Privacy', href: '#' },
-    { name: 'Terms', href: '#' },
-    { name: 'License', href: '#' }
   ]
 }
 
 const socialLinks = [
-  { icon: FacebookIcon, href: '#' },
-  { icon: TwitterIcon, href: '#' },
-  { icon: InstagramIcon, href: '#' },
-  { icon: LinkedinIcon, href: '#' }
+  { icon: LinkedinIcon, href: '#' },
+  { icon: TwitterIcon, href: '#' }
 ]
 </script>
 
@@ -40,13 +39,13 @@ const socialLinks = [
         <div class="space-y-6 max-w-[300px]">
           <div class="flex items-center space-x-2">
             <div class="size-8 rounded-lg bg-primary/10" />
-            <span class="text-xl font-bold">Brand</span>
+            <span class="text-xl font-bold">Feedback Intelligence</span>
           </div>
           <p class="text-muted-foreground">
-            Building better websites with modern tools and frameworks.
+            Transform your feedback into actionable insights with AI-powered surveys and analytics.
           </p>
           <div class="space-y-4">
-            <h3 class="font-medium">Subscribe to our newsletter</h3>
+            <h3 class="font-medium">Get product updates</h3>
             <div class="flex gap-2">
               <Input type="email" placeholder="Enter your email" />
               <Button>Subscribe</Button>
@@ -66,22 +65,22 @@ const socialLinks = [
               </li>
             </ul>
           </div>
-          <!-- Company Links -->
+          <!-- Solutions Links -->
           <div class="space-y-6">
-            <h3 class="text-lg font-semibold">Company</h3>
+            <h3 class="text-lg font-semibold">Solutions</h3>
             <ul class="space-y-3">
-              <li v-for="link in footerLinks.company" :key="link.name">
+              <li v-for="link in footerLinks.solutions" :key="link.name">
                 <a :href="link.href" class="text-muted-foreground hover:text-primary transition-colors">
                   {{ link.name }}
                 </a>
               </li>
             </ul>
           </div>
-          <!-- Legal Links -->
+          <!-- Resources Links -->
           <div class="space-y-6">
-            <h3 class="text-lg font-semibold">Legal</h3>
+            <h3 class="text-lg font-semibold">Resources</h3>
             <ul class="space-y-3">
-              <li v-for="link in footerLinks.legal" :key="link.name">
+              <li v-for="link in footerLinks.resources" :key="link.name">
                 <a :href="link.href" class="text-muted-foreground hover:text-primary transition-colors">
                   {{ link.name }}
                 </a>
@@ -103,7 +102,7 @@ const socialLinks = [
       <div class="border-t mt-16 pt-8">
         <div class="flex flex-col md:flex-row justify-between items-center gap-4">
           <p class="text-sm text-muted-foreground">
-            2024 Your Company. All rights reserved.
+            2025 Feedback Intelligence. All rights reserved.
           </p>
           <div class="flex items-center gap-4">
             <a href="#" class="text-sm text-muted-foreground hover:text-primary transition-colors">
@@ -111,9 +110,6 @@ const socialLinks = [
             </a>
             <a href="#" class="text-sm text-muted-foreground hover:text-primary transition-colors">
               Terms of Service
-            </a>
-            <a href="#" class="text-sm text-muted-foreground hover:text-primary transition-colors">
-              Cookie Policy
             </a>
           </div>
         </div>
