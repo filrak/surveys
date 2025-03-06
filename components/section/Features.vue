@@ -71,29 +71,29 @@
               </CardContent>
             </Card>
           </div>
-          <Card>
+          <Card class="relative z-10 transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl bg-card/95 backdrop-blur">
             <CardHeader class="p-4">
-              <CardTitle class="text-sm">Sentiment Analysis</CardTitle>
+              <CardTitle class="text-base font-semibold">Sentiment Analysis</CardTitle>
             </CardHeader>
             <CardContent class="p-4 pt-0">
-              <div class="space-y-2">
+              <div class="space-y-3">
                 <div class="flex items-center gap-2">
-                  <div class="w-full h-2 bg-muted rounded-full overflow-hidden">
-                    <div class="h-full bg-green-500 w-[75%]"></div>
+                  <div class="w-full h-3 bg-muted rounded-full overflow-hidden">
+                    <div class="h-full bg-green-500 w-[75%] transition-all duration-500"></div>
                   </div>
-                  <span class="text-sm">75%</span>
+                  <span class="text-sm font-medium">75%</span>
                 </div>
                 <div class="flex items-center gap-2">
-                  <div class="w-full h-2 bg-muted rounded-full overflow-hidden">
-                    <div class="h-full bg-yellow-500 w-[15%]"></div>
+                  <div class="w-full h-3 bg-muted rounded-full overflow-hidden">
+                    <div class="h-full bg-yellow-500 w-[15%] transition-all duration-500"></div>
                   </div>
-                  <span class="text-sm">15%</span>
+                  <span class="text-sm font-medium">15%</span>
                 </div>
                 <div class="flex items-center gap-2">
-                  <div class="w-full h-2 bg-muted rounded-full overflow-hidden">
-                    <div class="h-full bg-red-500 w-[10%]"></div>
+                  <div class="w-full h-3 bg-muted rounded-full overflow-hidden">
+                    <div class="h-full bg-red-500 w-[10%] transition-all duration-500"></div>
                   </div>
-                  <span class="text-sm">10%</span>
+                  <span class="text-sm font-medium">10%</span>
                 </div>
               </div>
             </CardContent>
