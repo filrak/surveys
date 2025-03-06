@@ -119,37 +119,37 @@
       <div class="relative p-4">
         <!-- Template gallery miniature -->
         <div class="grid grid-cols-2 gap-6 max-w-[500px] mx-auto">
-          <Card class="cursor-pointer hover:border-primary transition-colors group">
+          <Card class="cursor-pointer transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl bg-card/95 backdrop-blur">
             <CardHeader class="p-4 space-y-3">
               <div class="flex items-center justify-between">
-                <Badge variant="secondary" class="text-xs font-medium">Popular</Badge>
+                <Badge variant="default" class="text-xs font-medium bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 text-white">Product</Badge>
               </div>
               <CardTitle class="text-base">Customer Feedback</CardTitle>
               <p class="text-sm text-muted-foreground">10 questions</p>
             </CardHeader>
           </Card>
-          <Card class="cursor-pointer hover:border-primary transition-colors group">
+          <Card class="cursor-pointer transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl bg-card/95 backdrop-blur">
             <CardHeader class="p-4 space-y-3">
               <div class="flex items-center justify-between h-6">
-                <!-- Empty div to maintain consistent spacing -->
+                <Badge variant="default" class="text-xs font-medium bg-gradient-to-br from-purple-500 via-purple-600 to-purple-700 text-white">HR</Badge>
               </div>
               <CardTitle class="text-base">Employee Survey</CardTitle>
               <p class="text-sm text-muted-foreground">15 questions</p>
             </CardHeader>
           </Card>
-          <Card class="cursor-pointer hover:border-primary transition-colors group">
+          <Card class="cursor-pointer transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl bg-card/95 backdrop-blur">
             <CardHeader class="p-4 space-y-3">
               <div class="flex items-center justify-between h-6">
-                <!-- Empty div to maintain consistent spacing -->
+                <Badge variant="default" class="text-xs font-medium bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 text-white">Product</Badge>
               </div>
               <CardTitle class="text-base">Market Research</CardTitle>
               <p class="text-sm text-muted-foreground">12 questions</p>
             </CardHeader>
           </Card>
-          <Card class="cursor-pointer hover:border-primary transition-colors group">
+          <Card class="cursor-pointer transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl bg-card/95 backdrop-blur">
             <CardHeader class="p-4 space-y-3">
               <div class="flex items-center justify-between">
-                <Badge variant="secondary" class="text-xs font-medium">New</Badge>
+                <Badge variant="default" class="text-xs font-medium bg-gradient-to-br from-green-500 via-green-600 to-green-700 text-white">Marketing</Badge>
               </div>
               <CardTitle class="text-base">Event Feedback</CardTitle>
               <p class="text-sm text-muted-foreground">8 questions</p>
