@@ -74,6 +74,9 @@ bun run preview
 
 # TO-DO
 
+
+- Make data collected by chat at the end and metrics specific to the survey, so the dashbaord is custom.
+
 - associate survey types with colors, add customization of the types
 - Finish landing
 - Create pricing plans in Stripe
