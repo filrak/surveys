@@ -9,9 +9,9 @@
           Transform your surveys into engaging conversations. Our AI-powered chat interface makes respondents feel heard and understood, leading to more honest, detailed responses and higher completion rates. Perfect for qualitative research, customer feedback, and employee engagement surveys.
         </p>
       </div>
-      <div class="relative p-6 bg-card rounded-lg shadow-lg border">
+      <div class="relative p-4">
         <!-- Chat interface miniature -->
-        <div class="space-y-4 max-w-[300px] mx-auto scale-90">
+        <div class="space-y-4 max-w-[400px] mx-auto">
           <div class="flex flex-col gap-3">
             <!-- AI Message -->
             <div class="flex gap-3 items-start">
@@ -48,9 +48,9 @@
 
     <!-- Feature 2 -->
     <section class="grid md:grid-cols-2 gap-8 items-center mb-16">
-      <div class="relative p-6 bg-card rounded-lg shadow-lg border">
+      <div class="relative p-4">
         <!-- Analytics dashboard miniature -->
-        <div class="space-y-4 max-w-[400px] mx-auto scale-90">
+        <div class="space-y-4 max-w-[500px] mx-auto">
           <div class="grid grid-cols-2 gap-4">
             <Card>
               <CardHeader class="p-4">
@@ -116,9 +116,9 @@
           Hit the ground running with our collection of professionally designed survey templates. From customer feedback and market research to employee satisfaction and event feedback - we've got you covered. Each template is fully customizable and optimized for conversational AI interactions, saving you time while ensuring best practices.
         </p>
       </div>
-      <div class="relative p-6 bg-card rounded-lg shadow-lg border">
+      <div class="relative p-4">
         <!-- Template gallery miniature -->
-        <div class="grid grid-cols-2 gap-4 max-w-[400px] mx-auto scale-90">
+        <div class="grid grid-cols-2 gap-4 max-w-[500px] mx-auto">
           <Card class="cursor-pointer hover:border-primary transition-colors">
             <CardHeader class="p-4">
               <Badge variant="outline" class="mb-2">Popular</Badge>
