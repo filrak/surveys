@@ -77,7 +77,7 @@
                         Start Survey
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem @click="deleteSurvey(survey.id)" class="text-destructive">
+                      <DropdownMenuItem @click="deleteSurvey(survey.id)">
                         <Trash2Icon class="mr-2 h-4 w-4" />
                         Delete
                       </DropdownMenuItem>
@@ -106,7 +106,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCurrentUser } from 'vuefire'
 import { useSurvey } from '~/composables/useSurvey'
@@ -206,7 +206,21 @@ const formatDate = (timestamp) => {
 }
 
 const deleteSurvey = async (id) => {
-  // Add your delete logic here
-  surveysWithResponses.value = surveysWithResponses.value.filter(survey => survey.id !== id)
+  try {
+    // Get all answers for this survey first
+    const answers = await useAnswer().getAnswers(id)
+    
+    // Delete all answers
+    await Promise.all(answers.map(answer => useAnswer().deleteAnswer(answer.id)))
+    
+    // Delete the survey itself
+    await useSurvey().deleteSurvey(id)
+    
+    // Refresh the list
+    loadSurveysAndCounts()
+  } catch (error) {
+    console.error('Failed to delete survey:', error)
+    // Here you might want to show an error toast to the user
+  }
 }
 </script>
