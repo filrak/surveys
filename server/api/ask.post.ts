@@ -1,6 +1,21 @@
 import { defineEventHandler, readBody } from 'h3'
 import OpenAI from 'openai'
 
+interface Message {
+  type: 'user' | 'bot'
+  content: string
+  timestamp?: string
+}
+
+interface Answer {
+  id: string
+  conversation: Message[]
+  createdAt: string
+  updatedAt?: string
+  finished: boolean
+  summary?: string
+}
+
 const openai = new OpenAI()
 
 export default defineEventHandler(async (event) => {
@@ -8,11 +23,11 @@ export default defineEventHandler(async (event) => {
     const { answers, question } = await readBody(event)
 
     // Format all conversations into a structured context
-    const context = answers.map((answer, index) => {
-      if (!answer.messages) return `Survey Response #${index + 1}: No messages data`
+    const context = answers.map((answer: Answer, index: number) => {
+      if (!answer.conversation) return `Survey Response #${index + 1}: No conversation data`
       
-      const conversation = answer.messages
-        .map(msg => `${msg.type}: ${msg.content}`)
+      const conversation = answer.conversation
+        .map((msg: Message) => `${msg.type}: ${msg.content}`)
         .join('\n')
       
       return `Survey Response #${index + 1}:\n${conversation}`
