@@ -100,21 +100,20 @@
             @click="toggleConversation(answer.id)"
           >
             <span class="flex items-center">
-              <span class="mr-2">{{ expandedAnswers.has(answer.id) ? 'Hide' : 'Show' }} Conversation</span>
-              <component :is="expandedAnswers.has(answer.id) ? ChevronUpIcon : ChevronDownIcon" class="h-4 w-4" />
+              <span class="mr-2">{{ expandedAnswers.includes(answer.id) ? 'Hide' : 'Show' }} Conversation</span>
+              <component :is="expandedAnswers.includes(answer.id) ? ChevronUpIcon : ChevronDownIcon" class="h-4 w-4" />
             </span>
           </Button>
 
           <!-- Conversation -->
-          <div v-if="expandedAnswers.has(answer.id)" class="space-y-4">
+          <div v-if="expandedAnswers.includes(answer.id)" class="space-y-4">
             <ChatBubble
               v-for="(message, index) in answer.conversation"
               :key="index"
               :content="message.content"
               :is-user="message.type === 'user'"
-              :timestamp="new Date(answer.createdAt)"
             />
-          </div>
+            </div>
         </Card>
 
         <!-- Empty State -->
@@ -158,6 +157,22 @@ import StatBox from '~/components/ui/stat-box/StatBox.vue'
 import { useAnswer } from '~/composables/useAnswer'
 import { useSurvey } from '~/composables/useSurvey'
 
+interface Message {
+  type: 'user' | 'bot'
+  content: string
+  timestamp?: string
+}
+
+interface Answer {
+  id: string
+  surveyId: string
+  conversation: Message[]
+  summary?: string
+  finished: boolean
+  createdAt: string
+  updatedAt?: string
+}
+
 const router = useRouter()
 const route = useRoute()
 const { getSurvey } = useSurvey()
@@ -166,7 +181,7 @@ const { getAnswers, askQuestionAboutAnswers, loading: analyzing } = useAnswer()
 const loading = ref(true)
 const survey = ref(null)
 const answers = ref([])
-const expandedAnswers = ref(new Set())
+const expandedAnswers = ref([])
 const globalQuestion = ref('')
 const analysisResult = ref('')
 const filterStatus = ref('all')
@@ -202,10 +217,10 @@ const completionRatio = computed(() => {
 })
 
 const toggleConversation = (answerId) => {
-  if (expandedAnswers.value.has(answerId)) {
-    expandedAnswers.value.delete(answerId)
+  if (expandedAnswers.value.includes(answerId)) {
+    expandedAnswers.value = expandedAnswers.value.filter(id => id !== answerId)
   } else {
-    expandedAnswers.value.add(answerId)
+    expandedAnswers.value.push(answerId)
   }
 }
 

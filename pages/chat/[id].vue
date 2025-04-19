@@ -83,9 +83,23 @@ const route = useRoute()
 const router = useRouter()
 const survey = ref(null)
 const { getSurvey } = useSurvey()
-const { prepareAnswers, handleSave, saveAnswer, getAnswer } = useAnswer()
+const { saveAnswer } = useAnswer()
 
 const isSurveyComplete = ref(false)
+
+// Function to generate summary
+const generateSummary = async (conversation) => {
+  try {
+    const { data } = await useFetch('/api/summarize', {
+      method: 'POST',
+      body: { conversation }
+    })
+    return data.value?.summary
+  } catch (error) {
+    console.error('Error generating summary:', error)
+    return 'Failed to generate summary'
+  }
+}
 
 const sendMessage = async () => {
   if (!userInput.value.trim() || isLoading.value || isSurveyComplete.value) return
@@ -96,7 +110,8 @@ const sendMessage = async () => {
   // Add user message
   messages.value.push({
     type: 'user',
-    content: message
+    content: message,
+    timestamp: new Date()
   })
   await scrollToBottom()
 
@@ -137,7 +152,8 @@ const sendMessage = async () => {
     if (data.value?.success) {
       const botMessage = {
         type: 'bot',
-        content: data.value.message.content
+        content: data.value.message.content,
+        timestamp: new Date()
       }
       messages.value.push(botMessage)
 
@@ -148,19 +164,26 @@ const sendMessage = async () => {
         
         const thankYouMessage = {
           type: 'bot',
-          content: 'Thank you for completing the survey!'
+          content: 'Thank you for completing the survey!',
+          timestamp: new Date()
         }
         messages.value.push(thankYouMessage)
         
-        console.log('Survey completed! Saving final conversation...')
+        // Generate summary
+        const summary = await generateSummary(messages.value)
+        
+        // Save the completed conversation with summary
+        await saveAnswer(
+          survey.value.id,
+          {
+            conversation: messages.value,
+            summary,
+            finished: true
+          }
+        )
+        
+        console.log('Survey completed and saved with summary!')
       }
-
-      // Save conversation after each message
-      saveAnswer(
-        survey.value.id,
-        messages.value,
-        isSurveyComplete.value
-      )
     } else {
       throw new Error(data.value?.error || 'Failed to get response')
     }
@@ -168,7 +191,8 @@ const sendMessage = async () => {
     console.error('Failed to get AI response:', error)
     messages.value.push({
       type: 'bot',
-      content: 'I apologize, but I encountered an error. Please try again or contact support if the issue persists.'
+      content: 'I apologize, but I encountered an error. Please try again or contact support if the issue persists.',
+      timestamp: new Date()
     })
   } finally {
     isLoading.value = false
@@ -199,23 +223,14 @@ onMounted(async () => {
   // Check if survey has questions
   if (!survey.value.questions?.length) {
     console.error('Survey has no questions')
-    router.push('/')
     return
   }
-  
-  // Always start a new chat
-  const initialMessage = {
+
+  // Start new conversation
+  messages.value.push({
     type: 'bot',
-    content: `Hi! I'll help you complete the "${survey.value.name}" survey. I'll ask you some questions one by one.
-
-Let's start with the first question:
-
-${survey.value.questions[0].text}`
-  }
-  messages.value = [initialMessage]
-  
-  // Save initial state using survey ID
-  const { saveAnswer } = useAnswer()
-  saveAnswer(route.params.id, messages.value, false)
+    content: `Hello! I'll help you answer some questions about ${survey.value.name}. ${survey.value.questions[0].text}`,
+    timestamp: new Date()
+  })
 })
 </script>
