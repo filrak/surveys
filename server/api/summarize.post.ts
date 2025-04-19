@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
       messages: [
         {
           role: 'system',
-          content: 'You are a helpful assistant that summarizes survey conversations. Create a concise summary of the key points from the conversation, focusing on the answers provided by the user.'
+          content: 'You are a helpful assistant that summarizes survey conversations. Analyze the conversation and return a JSON response with two fields: "summary" (a concise summary of key points from the conversation, focusing on user answers) and "sentiment" (either "positive", "negative", or "neutral" based on the overall tone and content of responses).'
         },
         {
           role: 'user',
@@ -20,17 +20,18 @@ export default defineEventHandler(async (event) => {
         }
       ],
       model: 'gpt-4o-mini',
+      response_format: { type: 'json_object' },
       temperature: 0.7,
     })
 
     return {
-      summary: completion.choices[0].message.content
+      ...JSON.parse(completion.choices[0].message.content)
     }
   } catch (error) {
     console.error('Error generating summary:', error)
     throw createError({
       statusCode: 500,
-      message: 'Failed to generate summary'
+      message: error instanceof Error ? error.message : String(error)
     })
   }
 })

@@ -6,19 +6,53 @@
       </div>
 
       <!-- Stats -->
-      <div class="grid gap-4 md:grid-cols-2 mb-8">
-        <StatBox
-          :icon="CheckCircleIcon"
-          label="Completed Surveys"
-          :value="completedAnswers.length"
-          :description="`Out of ${answers.length} total responses`"
-        />
+      <div class="grid gap-4 md:grid-cols-3 mb-8">
         <StatBox
           :icon="PercentIcon"
           label="Completion Rate"
           :value="`${completionRatio}%`"
-          description="Percentage of completed surveys"
+          :description="`${completedAnswers.length} out of ${answers.length} surveys completed`"
         />
+
+        <!-- Sentiment Analysis -->
+        <Card class="col-span-2 relative z-10 bg-card/95">
+          <CardHeader class="p-4">
+            <CardTitle class="text-base font-semibold">Sentiment Analysis</CardTitle>
+          </CardHeader>
+          <CardContent class="p-4 pt-0">
+            <div class="space-y-3">
+              <div class="flex items-center gap-2">
+                <div class="w-full h-3 bg-muted rounded-full overflow-hidden">
+                  <div 
+                    class="h-full bg-green-500 transition-all duration-500"
+                    :style="{ width: `${sentimentStats.positive}%` }"
+                  />
+                </div>
+                <span class="text-sm font-medium">{{ sentimentStats.positive }}%</span>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <div class="w-full h-3 bg-muted rounded-full overflow-hidden">
+                  <div 
+                    class="h-full bg-yellow-500 transition-all duration-500"
+                    :style="{ width: `${sentimentStats.neutral}%` }"
+                  />
+                </div>
+                <span class="text-sm font-medium">{{ sentimentStats.neutral }}%</span>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <div class="w-full h-3 bg-muted rounded-full overflow-hidden">
+                  <div 
+                    class="h-full bg-red-500 transition-all duration-500"
+                    :style="{ width: `${sentimentStats.negative}%` }"
+                  />
+                </div>
+                <span class="text-sm font-medium">{{ sentimentStats.negative }}%</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       <!-- Global Question Section -->
@@ -71,11 +105,19 @@
                 Submitted {{ formatDate(answer.createdAt) }}
               </div>
               <div class="flex items-center gap-2">
-                <Badge :variant="answer.finished ? 'default' : 'secondary'">
+                <!-- <Badge :variant="answer.finished ? 'default' : 'secondary'">
                   {{ answer.finished ? 'Completed' : 'In Progress' }}
-                </Badge>
-                <Badge variant="outline" v-if="answer.updatedAt !== answer.createdAt">
-                  Updated {{ formatDate(answer.updatedAt) }}
+                </Badge> -->
+                <Badge 
+                  v-if="answer.sentiment" 
+                  :class="{
+                    'bg-emerald-500 hover:bg-emerald-600 text-white border-0': answer.sentiment === 'positive',
+                    'bg-amber-400 hover:bg-amber-500 text-amber-950 border-0': answer.sentiment === 'neutral',
+                    'bg-zinc-500 hover:bg-zinc-600 text-white border-0': answer.sentiment === 'negative'
+                  }"
+                  variant="outline"
+                >
+                  {{ answer.sentiment.toUpperCase() }}
                 </Badge>
               </div>
             </div>
@@ -113,7 +155,7 @@
               :content="message.content"
               :is-user="message.type === 'user'"
             />
-            </div>
+          </div>
         </Card>
 
         <!-- Empty State -->
@@ -180,8 +222,24 @@ const { getAnswers, askQuestionAboutAnswers, loading: analyzing } = useAnswer()
 
 const loading = ref(true)
 const survey = ref(null)
-const answers = ref([])
-const expandedAnswers = ref([])
+interface Message {
+  type: 'user' | 'bot'
+  content: string
+  timestamp?: string
+}
+
+interface Answer {
+  id: string
+  conversation: Message[]
+  summary?: string
+  sentiment?: 'positive' | 'negative' | 'neutral'
+  finished: boolean
+  createdAt: string
+  updatedAt?: string
+}
+
+const answers = ref<Answer[]>([])
+const expandedAnswers = ref<string[]>([])
 const globalQuestion = ref('')
 const analysisResult = ref('')
 const filterStatus = ref('all')
@@ -214,6 +272,24 @@ const completedAnswers = computed(() =>
 const completionRatio = computed(() => {
   if (!answers.value.length) return 0
   return Math.round((completedAnswers.value.length / answers.value.length) * 100)
+})
+
+const sentimentStats = computed(() => {
+  const total = answers.value.filter(a => a.sentiment).length
+  if (!total) return { positive: 0, neutral: 0, negative: 0 }
+
+  const counts = answers.value.reduce((acc, answer) => {
+    if (answer.sentiment) {
+      acc[answer.sentiment]++
+    }
+    return acc
+  }, { positive: 0, neutral: 0, negative: 0 })
+
+  return {
+    positive: Math.round((counts.positive / total) * 100),
+    neutral: Math.round((counts.neutral / total) * 100),
+    negative: Math.round((counts.negative / total) * 100)
+  }
 })
 
 const toggleConversation = (answerId) => {

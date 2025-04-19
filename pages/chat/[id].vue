@@ -94,10 +94,16 @@ const generateSummary = async (conversation) => {
       method: 'POST',
       body: { conversation }
     })
-    return data.value?.summary
+    return {
+      summary: data.value?.summary || 'Failed to generate summary',
+      sentiment: data.value?.sentiment || 'neutral'
+    }
   } catch (error) {
     console.error('Error generating summary:', error)
-    return 'Failed to generate summary'
+    return {
+      summary: 'Failed to generate summary',
+      sentiment: 'neutral'
+    }
   }
 }
 
@@ -169,18 +175,16 @@ const sendMessage = async () => {
         }
         messages.value.push(thankYouMessage)
         
-        // Generate summary
-        const summary = await generateSummary(messages.value)
-        
-        // Save the completed conversation with summary
-        await saveAnswer(
-          survey.value.id,
-          {
-            conversation: messages.value,
-            summary,
-            finished: true
-          }
-        )
+        // Generate summary and sentiment
+        const { summary, sentiment } = await generateSummary(messages.value)
+
+        // Save the answer with summary and sentiment
+        await saveAnswer(route.params.id, {
+          conversation: messages.value,
+          summary,
+          sentiment,
+          finished: true
+        })
         
         console.log('Survey completed and saved with summary!')
       }
